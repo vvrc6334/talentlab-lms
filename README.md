@@ -1,20 +1,17 @@
 # TalentLab LMS
 
-Plataforma de gestión de aprendizaje (LMS) desarrollada con Vue 3 + TypeScript + Supabase.
+LMS propio con Vue 3 + TypeScript + Supabase + Vercel.
 
-## Stack tecnológico
+## Stack
+- Vue 3 + TypeScript + Vite
+- Pinia (estado)
+- Supabase (BD + Auth)
+- Vercel (deploy)
 
-- **Frontend:** Vue 3 + TypeScript + Vite
-- **Estado:** Pinia
-- **Backend/DB:** Supabase (PostgreSQL)
-- **Deploy:** Vercel
-- **Estilos:** CSS personalizado
-
-## Módulos implementados
-
-- ✅ Autenticación con roles
-- ✅ Magic Link (acceso por WhatsApp sin contraseña)
-- ✅ Gestión de usuarios (manual + importación CSV masiva)
-- ✅ Gestión de cursos (manual + importación CSV)
-- ✅ Imágenes automáticas por categoría
-- 🔄 Recursos, Tracking, Evaluaciones, Certificados, Informes
+## Módulos
+- Auth con roles (superadmin, campus_admin, company_admin, participant)
+- Magic Link por WhatsApp
+- Usuarios: crear + importar CSV masivo
+- Cursos: crear + importar CSV
+- Imágenes automáticas por categoría
+- Matriz de cargos (G/SG/JM/PE/LP/PA/TO/OP x mkt/adm/ops/mec/fac/apo)
