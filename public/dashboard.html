@@ -1,0 +1,1862 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Kirkpatrick — TalentLab</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/vue@3.4.21/dist/vue.global.prod.js"><\/script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"><\/script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #080d1e; }
+    /* ═══════════════════════════════════════════════
+   KIRKPATRICK DASHBOARD — TalentLab Design System
+   Vue 3 Options API · Scoped CSS
+═══════════════════════════════════════════════ */
+
+
+
+:root {
+  --tl-blue:    #1847F5;
+  --tl-navy:    #0F1B4C;
+  --tl-green:   #00C896;
+  --tl-red:     #FF4D6D;
+  --tl-gold:    #F5A623;
+  --tl-purple:  #8B5CF6;
+  --bg:         #080d1e;
+  --bg2:        #0d1530;
+  --bg3:        #111d3d;
+  --border:     #1a2550;
+  --text:       #e2e8f0;
+  --muted:      #6b7280;
+  --font-head:  'Bricolage Grotesque', sans-serif;
+  --font-body:  'Outfit', sans-serif;
+  --radius:     12px;
+  --radius-lg:  18px;
+}
+
+.kirk-dashboard {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding-bottom: 60px;
+}
+
+/* ─── HEADER ─── */
+.dash-header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 18px 32px;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  flex-wrap: wrap;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.brand-mark {
+  width: 40px; height: 40px;
+  background: var(--tl-blue);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-head);
+  font-weight: 800; font-size: 16px; color: #fff;
+  letter-spacing: -1px;
+}
+
+.brand-info { display: flex; align-items: center; gap: 8px; }
+.brand-name { font-family: var(--font-head); font-weight: 700; font-size: 17px; }
+.brand-sep  { color: var(--muted); }
+.brand-empresa { color: var(--muted); font-size: 14px; }
+
+.header-badge {
+  background: var(--tl-blue)22;
+  color: var(--tl-blue);
+  border: 1px solid var(--tl-blue)44;
+  border-radius: 20px;
+  padding: 3px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.header-filters {
+  display: flex;
+  gap: 12px;
+  flex: 1;
+  flex-wrap: wrap;
+}
+
+.filter-pill {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.filter-pill label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--muted);
+}
+
+.filter-pill select {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  cursor: pointer;
+  outline: none;
+  transition: border-color .2s;
+}
+.filter-pill select:focus { border-color: var(--tl-blue); }
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+.last-update { font-size: 12px; color: var(--muted); }
+
+.alert-btn {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  position: relative;
+  font-size: 16px;
+  transition: border-color .2s, background .2s;
+}
+.alert-btn.has-alerts { border-color: var(--tl-red); background: var(--tl-red)15; }
+
+.alert-count {
+  position: absolute;
+  top: -4px; right: -4px;
+  background: var(--tl-red);
+  color: white;
+  border-radius: 50%;
+  width: 18px; height: 18px;
+  font-size: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700;
+}
+
+/* ─── ALERTAS PANEL ─── */
+.alertas-panel {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.alerta-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+}
+
+.alerta-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.alerta-rojo .alerta-dot    { background: var(--tl-red); }
+.alerta-amarillo .alerta-dot { background: var(--tl-gold); }
+
+.alerta-msg  { flex: 1; }
+.alerta-area { color: var(--muted); font-size: 12px; }
+
+.slide-down-enter-active, .slide-down-leave-active { transition: all .25s ease; }
+.slide-down-enter-from, .slide-down-leave-to { transform: translateY(-10px); opacity: 0; }
+
+/* ─── KPIs PORTADA ─── */
+.kpis-portada {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  padding: 24px 32px;
+}
+
+.kpi-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 22px;
+  animation: fadeUp .5s var(--delay, 0s) both ease;
+  transition: transform .2s, border-color .2s;
+  position: relative;
+  overflow: hidden;
+}
+.kpi-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--tl-blue);
+  border-radius: 3px 3px 0 0;
+}
+.kpi-card:hover { transform: translateY(-2px); border-color: var(--tl-blue)44; }
+
+.kpi-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+.kpi-icono { font-size: 22px; }
+
+.kpi-trend {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 20px;
+}
+.trend-up   { background: var(--tl-green)20; color: var(--tl-green); }
+.trend-down { background: var(--tl-red)20;   color: var(--tl-red);   }
+
+.kpi-valor {
+  font-family: var(--font-head);
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.kpi-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+.kpi-sub {
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+
+.kpi-bar-bg {
+  height: 3px;
+  background: var(--bg3);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.kpi-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 1s ease;
+}
+
+/* ─── TABS ─── */
+.kirk-tabs-wrap {
+  padding: 0 32px;
+  border-bottom: 1px solid var(--border);
+}
+
+.kirk-tabs {
+  display: flex;
+  gap: 4px;
+}
+
+.kirk-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 14px 22px;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  transition: all .2s;
+  color: var(--muted);
+  position: relative;
+  bottom: -1px;
+}
+
+.kirk-tab:hover { color: var(--text); }
+
+.kirk-tab.active {
+  color: var(--text);
+  border-bottom-color: var(--tl-blue);
+}
+
+.tab-nivel {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--tl-blue);
+}
+
+.tab-nombre {
+  font-family: var(--font-head);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.tab-desc {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* ─── SECCIONES ─── */
+.kirk-section {
+  padding: 28px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.section-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.nivel-tag {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+.n1 { background: var(--tl-blue)20;   color: var(--tl-blue);   border: 1px solid var(--tl-blue)40; }
+.n2 { background: var(--tl-green)20;  color: var(--tl-green);  border: 1px solid var(--tl-green)40; }
+.n3 { background: var(--tl-gold)20;   color: var(--tl-gold);   border: 1px solid var(--tl-gold)40; }
+.n4 { background: var(--tl-purple)20; color: var(--tl-purple); border: 1px solid var(--tl-purple)40; }
+
+.section-title {
+  font-family: var(--font-head);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+}
+.section-title em { font-style: normal; color: var(--muted); font-weight: 400; font-size: 18px; }
+
+/* ─── CARDS ─── */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 22px;
+}
+.card-full { width: 100%; }
+
+.card-label {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--muted);
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.card-label-sub {
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 12px;
+  color: var(--muted);
+  opacity: 0.7;
+}
+
+/* ─── GRIDS ─── */
+.grid-3-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.grid-2-col { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.grid-4-col { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+
+/* ─── GAUGE ─── */
+.card-gauge { display: flex; flex-direction: column; align-items: center; }
+.gauge-container { width: 200px; }
+.gauge-svg { width: 100%; }
+.gauge-refs { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 8px; }
+.gref {
+  font-size: 11px;
+  color: var(--c, #fff);
+  padding: 2px 8px;
+  background: color-mix(in srgb, var(--c, #fff) 15%, transparent);
+  border-radius: 20px;
+}
+
+/* ─── NPS ─── */
+.card-nps { display: flex; flex-direction: column; }
+.nps-big { display: flex; align-items: baseline; gap: 8px; margin-bottom: 10px; }
+.nps-score-val {
+  font-family: var(--font-head);
+  font-size: 48px;
+  font-weight: 800;
+  color: var(--tl-green);
+  letter-spacing: -2px;
+}
+.nps-score-label { font-size: 18px; color: var(--muted); }
+
+.stars-row { display: flex; align-items: center; gap: 3px; margin-bottom: 16px; }
+.star { font-size: 18px; }
+.star-on  { color: var(--tl-gold); }
+.star-off { color: var(--border); }
+.star-num { font-size: 13px; color: var(--muted); margin-left: 6px; }
+
+.nps-cats { display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.nps-cat-row { display: flex; align-items: center; gap: 8px; }
+.nps-cat-nombre { font-size: 12px; width: 90px; flex-shrink: 0; }
+.nps-cat-bar { flex: 1; height: 6px; background: var(--bg3); border-radius: 6px; overflow: hidden; }
+.nps-cat-fill { height: 100%; border-radius: 6px; transition: width .8s ease; }
+.nps-cat-pct { font-size: 12px; color: var(--muted); width: 36px; text-align: right; }
+.nps-encuestados { font-size: 11px; color: var(--muted); margin-top: 12px; }
+
+/* ─── DONUT LEGEND ─── */
+.donut-wrap { display: flex; justify-content: center; margin: 8px 0; }
+.donut-legend { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+.dleg-item { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+.dleg-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.dleg-txt { flex: 1; }
+.dleg-pct { color: var(--muted); }
+
+/* ─── TABLA ─── */
+.table-scroll { overflow-x: auto; }
+.kirk-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.kirk-table th {
+  text-align: left;
+  padding: 10px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+.th-green { color: var(--tl-green) !important; }
+.th-red   { color: var(--tl-red) !important; }
+.th-blue  { color: var(--tl-blue) !important; }
+.th-orange { color: var(--tl-gold) !important; }
+
+.kirk-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border)80;
+  vertical-align: middle;
+}
+.table-row:hover td { background: var(--bg3); }
+.table-row:last-child td { border-bottom: none; }
+
+.td-curso  { font-weight: 500; min-width: 160px; }
+.td-area   { color: var(--muted); }
+.td-persona { font-weight: 500; }
+.td-num    { text-align: center; font-variant-numeric: tabular-nums; }
+
+.c-green  { color: var(--tl-green); }
+.c-red    { color: var(--tl-red); }
+.c-blue   { color: var(--tl-blue); }
+.c-orange { color: var(--tl-gold); }
+
+/* ─── PCT CELL ─── */
+.pct-cell { display: flex; align-items: center; gap: 8px; }
+.pct-track { flex: 1; height: 6px; background: var(--bg3); border-radius: 6px; overflow: hidden; min-width: 60px; }
+.pct-fill  { height: 100%; border-radius: 6px; transition: width .8s ease; }
+.pct-num   { font-size: 12px; font-weight: 600; width: 34px; text-align: right; }
+
+/* ─── SEMÁFORO CHIP ─── */
+.sem-chip {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ─── SEMÁFORO GRID ─── */
+.semaforo-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;
+}
+
+.sem-area-card { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.sem-circle {
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.sem-pct { font-family: var(--font-head); font-size: 18px; font-weight: 700; }
+.sem-area-nombre { font-size: 12px; font-weight: 600; text-align: center; }
+.sem-area-det  { font-size: 11px; color: var(--muted); }
+.sem-area-horas { font-size: 10px; color: var(--muted); }
+
+/* ─── MINI KPIs ─── */
+.mini-kpis { }
+.mini-kpi {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  text-align: center;
+}
+.mkpi-val   { font-family: var(--font-head); font-size: 28px; font-weight: 800; margin-bottom: 4px; }
+.mkpi-label { font-size: 12px; font-weight: 600; margin-bottom: 2px; }
+.mkpi-sub   { font-size: 11px; color: var(--muted); }
+
+/* ─── INCREMENTO ─── */
+.formula-tag {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-family: monospace;
+  color: var(--tl-green);
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.inc-list { display: flex; flex-direction: column; gap: 16px; }
+.inc-row  { display: flex; align-items: center; gap: 16px; }
+.inc-nombre { width: 180px; flex-shrink: 0; font-size: 13px; font-weight: 500; }
+.inc-bars  { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+.inc-bar-item { display: flex; align-items: center; gap: 8px; }
+.inc-bar-lbl { font-size: 11px; color: var(--muted); width: 70px; flex-shrink: 0; }
+.inc-track { flex: 1; height: 8px; background: var(--bg3); border-radius: 8px; overflow: hidden; }
+.inc-fill  { height: 100%; border-radius: 8px; transition: width .8s ease; }
+.inc-diag  { background: var(--tl-red)88; }
+.inc-final { background: var(--tl-green); }
+.inc-bar-val { font-size: 12px; color: var(--muted); width: 34px; }
+
+.inc-delta-badge {
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-family: var(--font-head);
+  font-size: 15px;
+  font-weight: 700;
+  min-width: 64px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.delta-pos { background: var(--tl-green)20; color: var(--tl-green); }
+.delta-neg { background: var(--tl-red)20;   color: var(--tl-red);   }
+
+/* ─── APROBACIÓN ─── */
+.apro-list { display: flex; flex-direction: column; gap: 12px; }
+.apro-row  { display: flex; align-items: center; gap: 10px; }
+.apro-nombre { font-size: 12px; width: 90px; flex-shrink: 0; }
+.apro-bar-wrap { flex: 1; height: 22px; display: flex; border-radius: 6px; overflow: hidden; }
+.apro-seg { display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: white; transition: width .8s ease; }
+.apro-ok { background: var(--tl-green); }
+.apro-no { background: var(--tl-red); }
+.apro-nota { font-size: 11px; color: var(--muted); width: 64px; flex-shrink: 0; }
+.apro-legend { display: flex; gap: 16px; margin-top: 16px; font-size: 12px; }
+.leg-item { display: flex; align-items: center; gap: 6px; }
+.leg-dot  { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+/* ─── ESTANDARIZACIÓN ─── */
+.estand-list { display: flex; flex-direction: column; gap: 16px; }
+.estand-row  { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.estand-nombre { width: 200px; flex-shrink: 0; font-size: 13px; font-weight: 500; }
+.estand-metrics { display: flex; gap: 16px; flex-shrink: 0; }
+.estand-metric { display: flex; flex-direction: column; gap: 2px; align-items: center; }
+.em-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; }
+.em-val   { font-size: 14px; font-weight: 700; }
+.em-chip  { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px; }
+.estand-bar-wrap { flex: 1; min-width: 120px; }
+.estand-track { height: 10px; background: var(--bg3); border-radius: 10px; position: relative; overflow: hidden; }
+.estand-fill  { height: 100%; border-radius: 10px; transition: width .8s ease; }
+.estand-range {
+  position: absolute;
+  top: 0; height: 100%;
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.2);
+}
+
+/* ─── TRANSFERENCIA ─── */
+.transfer-list { display: flex; flex-direction: column; gap: 12px; }
+.transf-row    { display: flex; align-items: center; gap: 10px; }
+.transf-nombre { font-size: 12px; width: 160px; flex-shrink: 0; }
+.transf-track  { flex: 1; height: 8px; background: var(--bg3); border-radius: 8px; overflow: hidden; }
+.transf-fill   { height: 100%; border-radius: 8px; transition: width .8s ease; }
+.transf-dias   { font-size: 12px; font-weight: 600; width: 50px; text-align: right; }
+.transf-ref    { font-size: 11px; color: var(--muted); margin-top: 12px; }
+
+/* ─── RADAR 360 ─── */
+.radar-grid {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.radar-card { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.radar-titulo { font-size: 13px; font-weight: 600; text-align: center; }
+.radar-score  { font-size: 12px; color: var(--muted); }
+
+/* ─── BRECHA ─── */
+.brecha-bar { width: 100px; height: 6px; background: var(--bg3); border-radius: 6px; overflow: hidden; }
+.brecha-fill { height: 100%; background: var(--tl-green); border-radius: 6px; }
+
+/* ─── ROI ─── */
+.card-roi { }
+.roi-big { text-align: center; margin-bottom: 20px; }
+.roi-val {
+  font-family: var(--font-head);
+  font-size: 56px;
+  font-weight: 800;
+  color: var(--tl-green);
+  letter-spacing: -2px;
+}
+.roi-formula { font-size: 11px; color: var(--muted); font-family: monospace; }
+.roi-breakdown { display: flex; flex-direction: column; gap: 10px; }
+.roi-item  { display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
+.roi-lbl   { color: var(--muted); }
+.roi-num   { font-weight: 600; }
+
+/* ─── KPIs NEGOCIO ─── */
+.kpi-negocio-list { display: flex; flex-direction: column; gap: 12px; }
+.kn-row { display: flex; flex-direction: column; gap: 4px; }
+.kn-nombre { font-size: 12px; color: var(--muted); }
+.kn-vals { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+.kn-antes  { color: var(--muted); }
+.kn-arrow  { color: var(--muted); }
+.kn-despues { font-weight: 700; }
+.kn-delta  { font-size: 11px; font-weight: 600; }
+
+/* ─── PLAN ANUAL ─── */
+.plan-stats { display: flex; flex-direction: column; gap: 16px; justify-content: center; }
+.pstat-row  { display: flex; flex-direction: column; gap: 6px; }
+.pstat-label { font-size: 12px; font-weight: 500; }
+.pstat-bar-wrap { display: flex; align-items: center; gap: 8px; }
+.pstat-track { flex: 1; height: 8px; background: var(--bg3); border-radius: 8px; overflow: hidden; }
+.pstat-fill  { height: 100%; border-radius: 8px; transition: width .8s ease; }
+.pstat-pct   { font-size: 13px; font-weight: 700; width: 38px; }
+.pstat-detail { font-size: 11px; color: var(--muted); }
+
+/* ─── IA SLOT ─── */
+.ia-slot { padding: 12px 32px; }
+.ia-placeholder {
+  background: var(--bg2);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.ia-icon { font-size: 18px; }
+
+/* ─── ANIMACIONES ─── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 1200px) {
+  .grid-3-col { grid-template-columns: 1fr 1fr; }
+  .semaforo-grid { grid-template-columns: repeat(3, 1fr); }
+  .kpis-portada { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 800px) {
+  .dash-header { padding: 14px 16px; }
+  .kirk-section { padding: 20px 16px; }
+  .kpis-portada { padding: 16px; grid-template-columns: repeat(2, 1fr); }
+  .grid-3-col, .grid-2-col, .grid-4-col { grid-template-columns: 1fr; }
+  .semaforo-grid { grid-template-columns: repeat(2, 1fr); }
+  .kirk-tabs { overflow-x: auto; }
+  .inc-row { flex-wrap: wrap; }
+  .inc-nombre { width: 100%; }
+}
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="kirk-dashboard" :class="'periodo-' + filtros.periodo">
+
+    <!-- ══════════════════════════════════════
+         HEADER
+    ══════════════════════════════════════ -->
+    <header class="dash-header">
+      <div class="header-left">
+        <div class="brand-mark">TL</div>
+        <div class="brand-info">
+          <span class="brand-name">TalentLab</span>
+          <span class="brand-sep">·</span>
+          <span class="brand-empresa">{{ empresa }}</span>
+        </div>
+        <div class="header-badge">Dashboard Ejecutivo</div>
+      </div>
+
+      <div class="header-filters">
+        <div class="filter-pill" v-for="f in filterConfig" :key="f.key">
+          <label>{{ f.label }}</label>
+          <select v-model="filtros[f.key]" @change="onFiltroChange">
+            <option v-for="opt in f.options" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <div class="last-update">Actualizado {{ ultimaActualizacion }}</div>
+        <div class="alert-btn" :class="{ 'has-alerts': alertasCriticas.length }" @click="toggleAlertas">
+          <span class="alert-icon">⚠</span>
+          <span class="alert-count" v-if="alertasCriticas.length">{{ alertasCriticas.length }}</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Panel alertas -->
+    <transition name="slide-down">
+      <div class="alertas-panel" v-if="showAlertas && alertasCriticas.length">
+        <div class="alerta-item" v-for="(a, i) in alertasCriticas" :key="i" :class="'alerta-' + a.nivel">
+          <span class="alerta-dot"></span>
+          <span class="alerta-msg">{{ a.mensaje }}</span>
+          <span class="alerta-area">{{ a.area }}</span>
+        </div>
+      </div>
+    </transition>
+
+    <!-- ══════════════════════════════════════
+         KPIs PORTADA
+    ══════════════════════════════════════ -->
+    <section class="kpis-portada">
+      <div class="kpi-card" v-for="(kpi, i) in kpisPortada" :key="kpi.key"
+           :style="{ '--delay': i * 0.08 + 's' }">
+        <div class="kpi-top">
+          <div class="kpi-icono">{{ kpi.icono }}</div>
+          <div class="kpi-trend" :class="kpi.tendencia >= 0 ? 'trend-up' : 'trend-down'">
+            {{ kpi.tendencia >= 0 ? '↑' : '↓' }} {{ Math.abs(kpi.tendencia) }}%
+          </div>
+        </div>
+        <div class="kpi-valor">{{ kpi.valor }}</div>
+        <div class="kpi-label">{{ kpi.label }}</div>
+        <div class="kpi-sub">{{ kpi.sub }}</div>
+        <div class="kpi-bar-bg">
+          <div class="kpi-bar-fill" :style="{ width: kpi.progreso + '%', background: kpi.color }"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         TABS KIRKPATRICK
+    ══════════════════════════════════════ -->
+    <div class="kirk-tabs-wrap">
+      <nav class="kirk-tabs">
+        <button v-for="tab in tabs" :key="tab.id"
+                class="kirk-tab"
+                :class="{ active: tabActivo === tab.id }"
+                @click="tabActivo = tab.id">
+          <span class="tab-nivel">N{{ tab.nivel }}</span>
+          <span class="tab-nombre">{{ tab.nombre }}</span>
+          <span class="tab-desc">{{ tab.desc }}</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         N1 — REACCIÓN
+    ══════════════════════════════════════ -->
+    <section class="kirk-section" v-show="tabActivo === 'reaccion'">
+      <div class="section-eyebrow">
+        <span class="nivel-tag n1">Nivel 1</span>
+        <h2 class="section-title">Reacción <em>— Accountability & Satisfacción</em></h2>
+      </div>
+
+      <!-- Fila superior: gauge + NPS + razones -->
+      <div class="grid-3-col">
+
+        <!-- Gauge asistencia -->
+        <div class="card card-gauge">
+          <div class="card-label">Asistencia Global</div>
+          <div class="gauge-container">
+            <svg viewBox="0 0 200 130" class="gauge-svg">
+              <defs>
+                <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" :stop-color="gaugeColor(datosActivos.asistenciaGlobal)" stop-opacity="0.6"/>
+                  <stop offset="100%" :stop-color="gaugeColor(datosActivos.asistenciaGlobal)"/>
+                </linearGradient>
+              </defs>
+              <!-- Track -->
+              <path d="M 20 115 A 85 85 0 0 1 180 115"
+                    fill="none" stroke="#1a2040" stroke-width="16" stroke-linecap="round"/>
+              <!-- Fill -->
+              <path d="M 20 115 A 85 85 0 0 1 180 115"
+                    fill="none" stroke="url(#gaugeGrad)" stroke-width="16" stroke-linecap="round"
+                    :stroke-dasharray="calcGaugeDash(datosActivos.asistenciaGlobal)"
+                    stroke-dashoffset="0"
+                    style="transition: stroke-dasharray 1s ease"/>
+              <!-- Valor -->
+              <text x="100" y="105" text-anchor="middle" font-size="32" font-weight="700"
+                    :fill="gaugeColor(datosActivos.asistenciaGlobal)" font-family="'Bricolage Grotesque', sans-serif">
+                {{ datosActivos.asistenciaGlobal }}%
+              </text>
+              <text x="100" y="122" text-anchor="middle" font-size="11" fill="#6b7280" font-family="'Outfit', sans-serif">
+                asistencia global
+              </text>
+            </svg>
+          </div>
+          <div class="gauge-refs">
+            <span class="gref" style="--c:#00C896">≥80% Óptimo</span>
+            <span class="gref" style="--c:#F5A623">60–79% Alerta</span>
+            <span class="gref" style="--c:#FF4D6D">&lt;60% Crítico</span>
+          </div>
+        </div>
+
+        <!-- NPS Satisfacción -->
+        <div class="card card-nps">
+          <div class="card-label">Satisfacción (NPS)</div>
+          <div class="nps-big">
+            <div class="nps-score-val">{{ datosActivos.nps.score }}</div>
+            <div class="nps-score-label">NPS</div>
+          </div>
+          <div class="stars-row">
+            <span v-for="s in 5" :key="s" class="star"
+                  :class="s <= Math.round(datosActivos.nps.estrellas) ? 'star-on' : 'star-off'">★</span>
+            <span class="star-num">{{ datosActivos.nps.estrellas }}/5</span>
+          </div>
+          <div class="nps-cats">
+            <div class="nps-cat-row" v-for="cat in datosActivos.nps.desglose" :key="cat.nombre">
+              <span class="nps-cat-nombre">{{ cat.nombre }}</span>
+              <div class="nps-cat-bar">
+                <div class="nps-cat-fill" :style="{ width: cat.pct + '%', background: cat.color }"></div>
+              </div>
+              <span class="nps-cat-pct">{{ cat.pct }}%</span>
+            </div>
+          </div>
+          <div class="nps-encuestados">Basado en {{ datosActivos.nps.encuestados }} respuestas</div>
+        </div>
+
+        <!-- Razones inasistencia -->
+        <div class="card">
+          <div class="card-label">Razones de Inasistencia</div>
+          <div class="donut-wrap">
+            <canvas ref="chartDonut" width="180" height="180"></canvas>
+          </div>
+          <div class="donut-legend">
+            <div class="dleg-item" v-for="(r, i) in datosActivos.razonesInasistencia" :key="i">
+              <span class="dleg-dot" :style="{ background: coloresDonut[i] }"></span>
+              <span class="dleg-txt">{{ r.razon }}</span>
+              <span class="dleg-pct">{{ r.pct }}%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabla accountability -->
+      <div class="card card-full">
+        <div class="card-label">
+          Accountability por Curso
+          <span class="card-label-sub">Universo completo de personas capacitables</span>
+        </div>
+        <div class="table-scroll">
+          <table class="kirk-table">
+            <thead>
+              <tr>
+                <th>Curso</th>
+                <th>Área</th>
+                <th>Universo</th>
+                <th class="th-green">Asistieron</th>
+                <th class="th-red">No asistieron</th>
+                <th class="th-blue">Certificados</th>
+                <th class="th-orange">Sin certificar</th>
+                <th>Fuera de plazo</th>
+                <th>% Cumplimiento</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="c in tablaCursosFiltrada" :key="c.id" class="table-row">
+                <td class="td-curso">{{ c.nombre }}</td>
+                <td class="td-area">{{ c.area }}</td>
+                <td class="td-num">{{ c.universo }}</td>
+                <td class="td-num c-green">{{ c.asistieron }}</td>
+                <td class="td-num c-red">{{ c.noAsistieron }}</td>
+                <td class="td-num c-blue">{{ c.certificados }}</td>
+                <td class="td-num c-orange">{{ c.sinCertificar }}</td>
+                <td class="td-num" :class="c.fueraPlazo > 0 ? 'c-red' : 'c-green'">{{ c.fueraPlazo }}</td>
+                <td>
+                  <div class="pct-cell">
+                    <div class="pct-track">
+                      <div class="pct-fill" :style="{ width: c.cumplimiento + '%', background: semaforoColor(c.cumplimiento) }"></div>
+                    </div>
+                    <span class="pct-num" :style="{ color: semaforoColor(c.cumplimiento) }">{{ c.cumplimiento }}%</span>
+                  </div>
+                </td>
+                <td>
+                  <span class="sem-chip" :style="{ background: semaforoColor(c.cumplimiento) + '22', color: semaforoColor(c.cumplimiento), border: '1px solid ' + semaforoColor(c.cumplimiento) + '44' }">
+                    {{ semaforoLabel(c.cumplimiento) }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Semáforo por área -->
+      <div class="card card-full">
+        <div class="card-label">Semáforo de Cumplimiento por Área</div>
+        <div class="semaforo-grid">
+          <div class="sem-area-card" v-for="area in datosActivos.semaforoPorArea" :key="area.nombre">
+            <div class="sem-circle" :style="{ '--color': semaforoColor(area.pct), background: semaforoColor(area.pct) + '15', border: '3px solid ' + semaforoColor(area.pct) }">
+              <span class="sem-pct" :style="{ color: semaforoColor(area.pct) }">{{ area.pct }}%</span>
+            </div>
+            <div class="sem-area-nombre">{{ area.nombre }}</div>
+            <div class="sem-area-det">{{ area.asistidos }}/{{ area.total }} personas</div>
+            <div class="sem-area-horas">{{ area.horas }}h capacitadas</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         N2 — APRENDIZAJE
+    ══════════════════════════════════════ -->
+    <section class="kirk-section" v-show="tabActivo === 'aprendizaje'">
+      <div class="section-eyebrow">
+        <span class="nivel-tag n2">Nivel 2</span>
+        <h2 class="section-title">Aprendizaje <em>— Rendimiento y Brechas</em></h2>
+      </div>
+
+      <!-- KPIs rápidos -->
+      <div class="grid-4-col mini-kpis">
+        <div class="mini-kpi" v-for="m in datosActivos.kpisAprendizaje" :key="m.label">
+          <div class="mkpi-val" :style="{ color: m.color }">{{ m.valor }}</div>
+          <div class="mkpi-label">{{ m.label }}</div>
+          <div class="mkpi-sub">{{ m.sub }}</div>
+        </div>
+      </div>
+
+      <!-- Incremento de aprendizaje -->
+      <div class="card card-full">
+        <div class="card-label">
+          Incremento de Aprendizaje por Curso
+          <span class="formula-tag">ΔA = (Final − Diagnóstica) / Diagnóstica × 100</span>
+        </div>
+        <div class="inc-list">
+          <div class="inc-row" v-for="c in datosActivos.incrementoCursos" :key="c.nombre">
+            <div class="inc-nombre">{{ c.nombre }}</div>
+            <div class="inc-bars">
+              <div class="inc-bar-item">
+                <span class="inc-bar-lbl">Diagnóstica</span>
+                <div class="inc-track">
+                  <div class="inc-fill inc-diag" :style="{ width: c.diagnostica + '%' }"></div>
+                </div>
+                <span class="inc-bar-val">{{ c.diagnostica }}%</span>
+              </div>
+              <div class="inc-bar-item">
+                <span class="inc-bar-lbl">Final</span>
+                <div class="inc-track">
+                  <div class="inc-fill inc-final" :style="{ width: c.final + '%' }"></div>
+                </div>
+                <span class="inc-bar-val">{{ c.final }}%</span>
+              </div>
+            </div>
+            <div class="inc-delta-badge" :class="c.delta >= 0 ? 'delta-pos' : 'delta-neg'">
+              {{ c.delta >= 0 ? '↑' : '↓' }} {{ Math.abs(c.delta) }}%
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2-col">
+        <!-- Distribución de notas -->
+        <div class="card">
+          <div class="card-label">Distribución de Notas</div>
+          <canvas ref="chartHistograma" height="240"></canvas>
+        </div>
+
+        <!-- Aprobación por curso -->
+        <div class="card">
+          <div class="card-label">Aprobación vs Reprobación por Curso</div>
+          <div class="apro-list">
+            <div class="apro-row" v-for="c in datosActivos.aprobacionCursos" :key="c.nombre">
+              <div class="apro-nombre">{{ c.nombre }}</div>
+              <div class="apro-bar-wrap">
+                <div class="apro-seg apro-ok" :style="{ width: c.aprobados + '%' }">
+                  <span v-if="c.aprobados > 18">{{ c.aprobados }}%</span>
+                </div>
+                <div class="apro-seg apro-no" :style="{ width: (100 - c.aprobados) + '%' }">
+                  <span v-if="(100 - c.aprobados) > 12">{{ 100 - c.aprobados }}%</span>
+                </div>
+              </div>
+              <div class="apro-nota">Ø {{ c.notaPromedio }}</div>
+            </div>
+          </div>
+          <div class="apro-legend">
+            <span class="leg-item"><span class="leg-dot" style="background:#00C896"></span>Aprobados</span>
+            <span class="leg-item"><span class="leg-dot" style="background:#FF4D6D"></span>Reprobados</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Estandarización del conocimiento -->
+      <div class="card card-full">
+        <div class="card-label">
+          Estandarización del Conocimiento
+          <span class="card-label-sub">Desviación estándar de notas — menor dispersión = mayor estandarización</span>
+        </div>
+        <div class="estand-list">
+          <div class="estand-row" v-for="c in datosActivos.estandarizacion" :key="c.nombre">
+            <div class="estand-nombre">{{ c.nombre }}</div>
+            <div class="estand-metrics">
+              <div class="estand-metric">
+                <span class="em-label">Nota Promedio</span>
+                <span class="em-val" :style="{ color: '#1847F5' }">{{ c.promedio }}%</span>
+              </div>
+              <div class="estand-metric">
+                <span class="em-label">Desv. Estándar</span>
+                <span class="em-val" :style="{ color: c.desvEst < 10 ? '#00C896' : c.desvEst < 20 ? '#F5A623' : '#FF4D6D' }">
+                  σ {{ c.desvEst }}
+                </span>
+              </div>
+              <div class="estand-metric">
+                <span class="em-label">Nivel Estándar</span>
+                <span class="em-chip" :style="{ background: c.desvEst < 10 ? '#00C89622' : c.desvEst < 20 ? '#F5A62322' : '#FF4D6D22', color: c.desvEst < 10 ? '#00C896' : c.desvEst < 20 ? '#F5A623' : '#FF4D6D' }">
+                  {{ c.desvEst < 10 ? 'Alto' : c.desvEst < 20 ? 'Medio' : 'Bajo' }}
+                </span>
+              </div>
+            </div>
+            <div class="estand-bar-wrap">
+              <div class="estand-track">
+                <div class="estand-fill" :style="{ width: c.promedio + '%', background: 'linear-gradient(90deg, #1847F5, #00C896)' }"></div>
+                <div class="estand-range" :style="{ left: Math.max(0, c.promedio - c.desvEst) + '%', width: Math.min(100, c.desvEst * 2) + '%' }"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabla rendimiento por persona -->
+      <div class="card card-full">
+        <div class="card-label">Rendimiento Individual</div>
+        <div class="table-scroll">
+          <table class="kirk-table">
+            <thead>
+              <tr>
+                <th>Persona</th>
+                <th>Área</th>
+                <th>Cargo</th>
+                <th>Curso</th>
+                <th>Nota Diagnóstica</th>
+                <th>Nota Final</th>
+                <th>ΔA%</th>
+                <th>Intentos</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="p in datosActivos.rendimientoPersonas" :key="p.id">
+                <td class="td-persona">{{ p.nombre }}</td>
+                <td>{{ p.area }}</td>
+                <td>{{ p.cargo }}</td>
+                <td class="td-curso">{{ p.curso }}</td>
+                <td class="td-num">{{ p.notaDiag }}%</td>
+                <td class="td-num" :class="p.notaFinal >= 60 ? 'c-green' : 'c-red'">{{ p.notaFinal }}%</td>
+                <td class="td-num" :class="p.delta >= 0 ? 'c-green' : 'c-red'">
+                  {{ p.delta >= 0 ? '+' : '' }}{{ p.delta }}%
+                </td>
+                <td class="td-num" :class="p.intentos > 1 ? 'c-orange' : ''">{{ p.intentos }}</td>
+                <td>
+                  <span class="sem-chip" :style="{ background: p.notaFinal >= 60 ? '#00C89622' : '#FF4D6D22', color: p.notaFinal >= 60 ? '#00C896' : '#FF4D6D', border: '1px solid ' + (p.notaFinal >= 60 ? '#00C89644' : '#FF4D6D44') }">
+                    {{ p.notaFinal >= 60 ? 'Aprobado' : 'Reprobado' }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         N3 — CONDUCTA
+    ══════════════════════════════════════ -->
+    <section class="kirk-section" v-show="tabActivo === 'conducta'">
+      <div class="section-eyebrow">
+        <span class="nivel-tag n3">Nivel 3</span>
+        <h2 class="section-title">Conducta <em>— Transferencia al Puesto</em></h2>
+      </div>
+
+      <div class="grid-2-col">
+        <!-- Índice de transferencia -->
+        <div class="card">
+          <div class="card-label">Índice de Transferencia por Curso</div>
+          <canvas ref="chartTransferencia" height="260"></canvas>
+        </div>
+
+        <!-- Tiempo hasta transferencia -->
+        <div class="card">
+          <div class="card-label">Tiempo Promedio hasta Transferencia</div>
+          <div class="transfer-list">
+            <div class="transf-row" v-for="c in datosActivos.tiempoTransferencia" :key="c.nombre">
+              <div class="transf-nombre">{{ c.nombre }}</div>
+              <div class="transf-track">
+                <div class="transf-fill" :style="{ width: Math.min(100, (c.dias / 90) * 100) + '%', background: c.dias <= 30 ? '#00C896' : c.dias <= 60 ? '#F5A623' : '#FF4D6D' }"></div>
+              </div>
+              <div class="transf-dias" :style="{ color: c.dias <= 30 ? '#00C896' : c.dias <= 60 ? '#F5A623' : '#FF4D6D' }">{{ c.dias }} días</div>
+            </div>
+          </div>
+          <div class="transf-ref">Referencia: &lt;30d Excelente · 30-60d Normal · &gt;60d Lento</div>
+        </div>
+      </div>
+
+      <!-- Evidencia 360 -->
+      <div class="card card-full">
+        <div class="card-label">
+          Evidencia Conductual 360°
+          <span class="card-label-sub">Evaluación observacional post-capacitación — escala 1 a 5</span>
+        </div>
+        <div class="radar-grid">
+          <div class="radar-card" v-for="ev in datosActivos.evidencia360" :key="ev.curso">
+            <div class="radar-titulo">{{ ev.curso }}</div>
+            <canvas :ref="'chartRadar_' + ev.id" width="220" height="220"></canvas>
+            <div class="radar-score">
+              Promedio global: <strong>{{ ev.promedio }}</strong>/5
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabla brecha conductual -->
+      <div class="card card-full">
+        <div class="card-label">Brecha Conductual Pre/Post Capacitación</div>
+        <div class="table-scroll">
+          <table class="kirk-table">
+            <thead>
+              <tr>
+                <th>Competencia</th>
+                <th>Curso</th>
+                <th>Área</th>
+                <th>Score Pre</th>
+                <th>Score Post</th>
+                <th>Brecha Cerrada</th>
+                <th>% Mejora</th>
+                <th>Evaluador</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="b in datosActivos.brechaConductual" :key="b.id">
+                <td class="td-curso">{{ b.competencia }}</td>
+                <td>{{ b.curso }}</td>
+                <td>{{ b.area }}</td>
+                <td class="td-num c-orange">{{ b.scorePre }}/5</td>
+                <td class="td-num c-blue">{{ b.scorePost }}/5</td>
+                <td>
+                  <div class="brecha-bar">
+                    <div class="brecha-fill" :style="{ width: ((b.scorePost - b.scorePre) / (5 - b.scorePre) * 100) + '%' }"></div>
+                  </div>
+                </td>
+                <td class="td-num c-green">+{{ Math.round((b.scorePost - b.scorePre) / b.scorePre * 100) }}%</td>
+                <td>{{ b.evaluador }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         N4 — RESULTADOS
+    ══════════════════════════════════════ -->
+    <section class="kirk-section" v-show="tabActivo === 'resultados'">
+      <div class="section-eyebrow">
+        <span class="nivel-tag n4">Nivel 4</span>
+        <h2 class="section-title">Resultados <em>— Impacto en el Negocio & ROI</em></h2>
+      </div>
+
+      <div class="grid-3-col">
+        <div class="card card-roi">
+          <div class="card-label">ROI de Capacitación</div>
+          <div class="roi-big">
+            <div class="roi-val">{{ datosActivos.roi.pct }}%</div>
+            <div class="roi-formula">ROI = (Beneficio − Costo) / Costo × 100</div>
+          </div>
+          <div class="roi-breakdown">
+            <div class="roi-item">
+              <span class="roi-lbl">Inversión total</span>
+              <span class="roi-num c-orange">{{ datosActivos.roi.inversion }}</span>
+            </div>
+            <div class="roi-item">
+              <span class="roi-lbl">Beneficio estimado</span>
+              <span class="roi-num c-green">{{ datosActivos.roi.beneficio }}</span>
+            </div>
+            <div class="roi-item">
+              <span class="roi-lbl">Costo por persona</span>
+              <span class="roi-num c-blue">{{ datosActivos.roi.costoPorPersona }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">Horas de Capacitación</div>
+          <canvas ref="chartHoras" height="220"></canvas>
+        </div>
+
+        <div class="card">
+          <div class="card-label">KPIs de Negocio Impactados</div>
+          <div class="kpi-negocio-list">
+            <div class="kn-row" v-for="k in datosActivos.kpisNegocio" :key="k.nombre">
+              <div class="kn-nombre">{{ k.nombre }}</div>
+              <div class="kn-vals">
+                <span class="kn-antes">{{ k.antes }}</span>
+                <span class="kn-arrow">→</span>
+                <span class="kn-despues" :class="k.mejora ? 'c-green' : 'c-red'">{{ k.despues }}</span>
+              </div>
+              <div class="kn-delta" :class="k.mejora ? 'c-green' : 'c-red'">
+                {{ k.mejora ? '↓' : '↑' }} {{ k.delta }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gestión del Plan -->
+      <div class="card card-full">
+        <div class="card-label">
+          Gestión del Plan Anual
+          <span class="card-label-sub">Tiempo promedio de trabajo, cursos cerrados fuera de plazo</span>
+        </div>
+        <div class="grid-2-col">
+          <canvas ref="chartPlanAnual" height="280"></canvas>
+          <div class="plan-stats">
+            <div class="pstat-row" v-for="p in datosActivos.planAnual" :key="p.label">
+              <div class="pstat-label">{{ p.label }}</div>
+              <div class="pstat-bar-wrap">
+                <div class="pstat-track">
+                  <div class="pstat-fill" :style="{ width: p.pct + '%', background: p.color }"></div>
+                </div>
+                <span class="pstat-pct" :style="{ color: p.color }">{{ p.pct }}%</span>
+              </div>
+              <div class="pstat-detail">{{ p.detalle }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cursos fuera de plazo por área -->
+      <div class="card card-full">
+        <div class="card-label">Cursos Cerrados Fuera de Plazo</div>
+        <div class="table-scroll">
+          <table class="kirk-table">
+            <thead>
+              <tr>
+                <th>Curso</th>
+                <th>Área</th>
+                <th>Cargo</th>
+                <th>Plazo comprometido</th>
+                <th>Fecha cierre real</th>
+                <th>Días de retraso</th>
+                <th>Responsable</th>
+                <th>Impacto</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="c in datosActivos.cursosAtraso" :key="c.id">
+                <td class="td-curso">{{ c.nombre }}</td>
+                <td>{{ c.area }}</td>
+                <td>{{ c.cargo }}</td>
+                <td>{{ c.plazo }}</td>
+                <td>{{ c.cierreReal }}</td>
+                <td class="td-num" :class="c.diasRetraso > 14 ? 'c-red' : 'c-orange'">
+                  +{{ c.diasRetraso }}d
+                </td>
+                <td>{{ c.responsable }}</td>
+                <td>
+                  <span class="sem-chip" :style="{ background: c.diasRetraso > 14 ? '#FF4D6D22' : '#F5A62322', color: c.diasRetraso > 14 ? '#FF4D6D' : '#F5A623', border: '1px solid ' + (c.diasRetraso > 14 ? '#FF4D6D44' : '#F5A62344') }">
+                    {{ c.diasRetraso > 14 ? 'Alto' : 'Moderado' }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         SLOT PARA IA (futuro)
+         Para activar IA: reemplaza este bloque
+         con <KirkpatrickInsights :datos="datosActivos" />
+    ══════════════════════════════════════ -->
+    <div class="ia-slot" v-if="mostrarSlotIA">
+      <!-- 
+        🤖 SLOT IA — CONECTAR AQUÍ
+        Props disponibles: datosActivos, filtros, tabActivo
+        Ejemplo futuro:
+        <KirkpatrickInsights
+          :datos="datosActivos"
+          :filtros="filtros"
+          :nivel="tabActivo"
+          :apiKey="supabaseConfig.anthropicKey"
+        />
+      -->
+      <div class="ia-placeholder">
+        <span class="ia-icon">🤖</span>
+        <span>Análisis IA — próximamente</span>
+      </div>
+    </div>
+
+  </div>
+  </div>
+
+  <script>
+    const AppComponent = {
+  name: 'KirkpatrickDashboard',
+
+  props: {
+    empresa: { type: String, default: 'Coexca S.A.' },
+    modo: { type: String, default: 'demo' },
+    datosReales: { type: Object, default: null }
+  },
+
+  emits: ['filtro-change'],
+
+  data() {
+    return {
+      tabActivo: 'reaccion',
+      showAlertas: false,
+      mostrarSlotIA: false,
+      ultimaActualizacion: new Date().toLocaleDateString('es-CL', { day: '2-digit', month: 'short', year: 'numeric' }),
+
+      filtros: {
+        periodo: 'trimestre',
+        area: 'todas',
+        familia: 'todas',
+        curso: 'todos'
+      },
+
+      filterConfig: [
+        {
+          key: 'periodo', label: 'Período',
+          options: [
+            { value: 'mes', label: 'Este mes' },
+            { value: 'trimestre', label: 'Trimestre' },
+            { value: 'año', label: 'Año completo' }
+          ]
+        },
+        {
+          key: 'area', label: 'Área',
+          options: [
+            { value: 'todas', label: 'Todas las áreas' },
+            { value: 'operaciones', label: 'Operaciones' },
+            { value: 'administracion', label: 'Administración' },
+            { value: 'comercial', label: 'Comercial' },
+            { value: 'rrhh', label: 'RRHH' }
+          ]
+        },
+        {
+          key: 'familia', label: 'Familia de Cargos',
+          options: [
+            { value: 'todas', label: 'Todos los cargos' },
+            { value: 'gerencia', label: 'Gerencia' },
+            { value: 'jefatura', label: 'Jefatura' },
+            { value: 'profesional', label: 'Profesional' },
+            { value: 'operativo', label: 'Operativo' }
+          ]
+        },
+        {
+          key: 'curso', label: 'Curso',
+          options: [
+            { value: 'todos', label: 'Todos los cursos' },
+            { value: 'c1', label: 'Seguridad en el Trabajo' },
+            { value: 'c2', label: 'Liderazgo Efectivo' },
+            { value: 'c3', label: 'Excel Avanzado' },
+            { value: 'c4', label: 'Atención al Cliente' },
+            { value: 'c5', label: 'Normativa ISO 9001' }
+          ]
+        }
+      ],
+
+      tabs: [
+        { id: 'reaccion',    nivel: 1, nombre: 'Reacción',   desc: 'Accountability & Satisfacción' },
+        { id: 'aprendizaje', nivel: 2, nombre: 'Aprendizaje', desc: 'Rendimiento & Brechas' },
+        { id: 'conducta',    nivel: 3, nombre: 'Conducta',    desc: 'Transferencia al Puesto' },
+        { id: 'resultados',  nivel: 4, nombre: 'Resultados',  desc: 'Impacto & ROI' }
+      ],
+
+      coloresDonut: ['#1847F5', '#00C896', '#FF4D6D', '#F5A623', '#8B5CF6'],
+
+      // Instancias Chart.js
+      _charts: {},
+
+      // ─────────────────────────────────────
+      // DATOS DEMO (reemplazar con Supabase)
+      // ─────────────────────────────────────
+      datosPorPeriodo: {
+        mes: {
+          asistenciaGlobal: 71,
+          nps: {
+            score: 38, estrellas: 3.8, encuestados: 124,
+            desglose: [
+              { nombre: 'Promotores', pct: 62, color: '#00C896' },
+              { nombre: 'Pasivos', pct: 24, color: '#F5A623' },
+              { nombre: 'Detractores', pct: 14, color: '#FF4D6D' }
+            ]
+          },
+          razonesInasistencia: [
+            { razon: 'Carga laboral', pct: 38 },
+            { razon: 'Sin aviso', pct: 25 },
+            { razon: 'Enfermedad', pct: 20 },
+            { razon: 'No inscrito', pct: 17 }
+          ],
+          semaforoPorArea: [
+            { nombre: 'Operaciones',    pct: 67, asistidos: 54,  total: 80,  horas: 320 },
+            { nombre: 'Administración', pct: 88, asistidos: 35,  total: 40,  horas: 140 },
+            { nombre: 'Comercial',      pct: 55, asistidos: 22,  total: 40,  horas: 88  },
+            { nombre: 'RRHH',           pct: 90, asistidos: 18,  total: 20,  horas: 72  },
+            { nombre: 'Producción',     pct: 73, asistidos: 62,  total: 85,  horas: 372 },
+            { nombre: 'Calidad',        pct: 82, asistidos: 28,  total: 34,  horas: 168 }
+          ],
+          kpisAprendizaje: [
+            { label: 'Nota Promedio Global', valor: '72%', sub: 'Todos los cursos', color: '#1847F5' },
+            { label: '% Aprobación',          valor: '68%', sub: 'Sobre nota 60%',   color: '#00C896' },
+            { label: 'Incremento Promedio',   valor: '+31%', sub: 'ΔA promedio',      color: '#F5A623' },
+            { label: 'Tasa de Reintento',     valor: '18%', sub: 'Reprobaron y volvieron', color: '#FF4D6D' }
+          ],
+          incrementoCursos: [
+            { nombre: 'Seguridad en el Trabajo', diagnostica: 42, final: 78, delta: 86 },
+            { nombre: 'Liderazgo Efectivo',       diagnostica: 55, final: 74, delta: 35 },
+            { nombre: 'Excel Avanzado',            diagnostica: 30, final: 68, delta: 127 },
+            { nombre: 'Atención al Cliente',       diagnostica: 60, final: 82, delta: 37 },
+            { nombre: 'Normativa ISO 9001',        diagnostica: 35, final: 71, delta: 103 }
+          ],
+          aprobacionCursos: [
+            { nombre: 'Seguridad',    aprobados: 82, notaPromedio: '74%' },
+            { nombre: 'Liderazgo',    aprobados: 70, notaPromedio: '71%' },
+            { nombre: 'Excel',        aprobados: 58, notaPromedio: '65%' },
+            { nombre: 'Atención',     aprobados: 76, notaPromedio: '73%' },
+            { nombre: 'ISO 9001',     aprobados: 65, notaPromedio: '69%' }
+          ],
+          estandarizacion: [
+            { nombre: 'Seguridad en el Trabajo', promedio: 74, desvEst: 8  },
+            { nombre: 'Liderazgo Efectivo',       promedio: 71, desvEst: 14 },
+            { nombre: 'Excel Avanzado',            promedio: 65, desvEst: 22 },
+            { nombre: 'Atención al Cliente',       promedio: 73, desvEst: 9  },
+            { nombre: 'Normativa ISO 9001',        promedio: 69, desvEst: 11 }
+          ],
+          rendimientoPersonas: [
+            { id: 1, nombre: 'M. González',    area: 'Operaciones',    cargo: 'Operador',    curso: 'Seguridad',   notaDiag: 45, notaFinal: 82, delta: 82,  intentos: 1 },
+            { id: 2, nombre: 'C. Rojas',       area: 'Administración', cargo: 'Analista',    curso: 'Excel',       notaDiag: 28, notaFinal: 55, delta: 96,  intentos: 2 },
+            { id: 3, nombre: 'P. Martínez',    area: 'Comercial',      cargo: 'Ejecutivo',   curso: 'Atención',    notaDiag: 62, notaFinal: 88, delta: 42,  intentos: 1 },
+            { id: 4, nombre: 'J. Fuentes',     area: 'Producción',     cargo: 'Supervisor',  curso: 'Liderazgo',   notaDiag: 50, notaFinal: 49, delta: -2,  intentos: 3 },
+            { id: 5, nombre: 'A. Valdés',      area: 'Calidad',        cargo: 'Especialista', curso: 'ISO 9001',   notaDiag: 38, notaFinal: 74, delta: 95,  intentos: 1 },
+            { id: 6, nombre: 'R. Sepúlveda',   area: 'Operaciones',    cargo: 'Técnico',     curso: 'Seguridad',   notaDiag: 55, notaFinal: 71, delta: 29,  intentos: 1 },
+            { id: 7, nombre: 'L. Torres',      area: 'RRHH',           cargo: 'Analista',    curso: 'Liderazgo',   notaDiag: 60, notaFinal: 80, delta: 33,  intentos: 1 }
+          ],
+          tiempoTransferencia: [
+            { nombre: 'Seguridad en el Trabajo', dias: 18 },
+            { nombre: 'Liderazgo Efectivo',       dias: 45 },
+            { nombre: 'Excel Avanzado',            dias: 22 },
+            { nombre: 'Atención al Cliente',       dias: 35 },
+            { nombre: 'Normativa ISO 9001',        dias: 67 }
+          ],
+          evidencia360: [
+            {
+              id: 'seg', curso: 'Seguridad en el Trabajo', promedio: 4.1,
+              dimensiones: ['Uso EPP', 'Reporte', 'Procedimientos', 'Emergencias', 'Liderazgo'],
+              preCapacitacion: [2.8, 3.0, 2.5, 2.2, 2.9],
+              postCapacitacion: [4.2, 4.0, 4.3, 3.9, 4.1]
+            },
+            {
+              id: 'lid', curso: 'Liderazgo Efectivo', promedio: 3.8,
+              dimensiones: ['Delegación', 'Feedback', 'Motivación', 'Planificación', 'Comunicación'],
+              preCapacitacion: [2.5, 2.8, 3.0, 2.3, 3.1],
+              postCapacitacion: [3.7, 4.0, 3.9, 3.6, 4.0]
+            }
+          ],
+          brechaConductual: [
+            { id: 1, competencia: 'Uso correcto de EPP',         curso: 'Seguridad',  area: 'Operaciones',  scorePre: 2.5, scorePost: 4.3, evaluador: 'Jefe Directo' },
+            { id: 2, competencia: 'Feedback constructivo',       curso: 'Liderazgo',  area: 'Producción',   scorePre: 2.8, scorePost: 3.9, evaluador: 'Par + Jefe'   },
+            { id: 3, competencia: 'Escucha activa',              curso: 'Atención',   area: 'Comercial',    scorePre: 3.1, scorePost: 4.4, evaluador: 'Cliente'       },
+            { id: 4, competencia: 'Aplicación normativa ISO',    curso: 'ISO 9001',   area: 'Calidad',      scorePre: 2.2, scorePost: 4.1, evaluador: 'Jefe Directo' }
+          ],
+          roi: {
+            pct: 287,
+            inversion: '$4.200.000',
+            beneficio: '$16.254.000',
+            costoPorPersona: '$15.240'
+          },
+          kpisNegocio: [
+            { nombre: 'Incidentes de seguridad / mes', antes: '7',    despues: '2',    delta: '71%',  mejora: true  },
+            { nombre: 'Satisfacción de clientes (NPS)', antes: '31',   despues: '47',   delta: '+16p', mejora: true  },
+            { nombre: 'Errores de proceso / semana',   antes: '23',   despues: '11',   delta: '52%',  mejora: true  },
+            { nombre: 'Rotación del personal',          antes: '18%',  despues: '14%',  delta: '4pp',  mejora: true  },
+            { nombre: 'Tiempo promedio de respuesta',  antes: '4.2h', despues: '2.8h', delta: '33%',  mejora: true  }
+          ],
+          planAnual: [
+            { label: 'Plan ejecutado vs comprometido', pct: 71, color: '#F5A623', detalle: '17/24 cursos' },
+            { label: 'Cobertura de población',         pct: 78, color: '#1847F5', detalle: '211/270 personas' },
+            { label: 'Cursos en plazo',                pct: 65, color: '#00C896', detalle: '11/17 cursos ejecutados' },
+            { label: 'Presupuesto ejecutado',          pct: 82, color: '#8B5CF6', detalle: '$3.4M / $4.2M' }
+          ],
+          cursosAtraso: [
+            { id: 1, nombre: 'Excel Avanzado',         area: 'Administración', cargo: 'Analista',   plazo: '31 Ene 2026', cierreReal: '18 Feb 2026', diasRetraso: 18, responsable: 'J. Pérez'    },
+            { id: 2, nombre: 'Normativa ISO 9001',     area: 'Calidad',        cargo: 'Especialista', plazo: '28 Feb 2026', cierreReal: '25 Mar 2026', diasRetraso: 25, responsable: 'M. Soto'    },
+            { id: 3, nombre: 'Liderazgo Efectivo',     area: 'Producción',     cargo: 'Supervisor', plazo: '15 Feb 2026', cierreReal: '20 Feb 2026', diasRetraso: 5,  responsable: 'K. Lagos'   }
+          ]
+        },
+        trimestre: null,
+        año: null
+      }
+    }
+  },
+
+  computed: {
+    datosActivos() {
+      if (this.modo === 'real' && this.datosReales) return this.datosReales
+      // En modo demo, todos los períodos usan los mismos datos base
+      return this.datosPorPeriodo.mes
+    },
+
+    areas() {
+      return ['Operaciones', 'Administración', 'Comercial', 'RRHH', 'Producción', 'Calidad']
+    },
+
+    familias() {
+      return ['Gerencia', 'Jefatura', 'Profesional', 'Operativo']
+    },
+
+    cursos() {
+      return [
+        { id: 'c1', nombre: 'Seguridad en el Trabajo' },
+        { id: 'c2', nombre: 'Liderazgo Efectivo' },
+        { id: 'c3', nombre: 'Excel Avanzado' },
+        { id: 'c4', nombre: 'Atención al Cliente' },
+        { id: 'c5', nombre: 'Normativa ISO 9001' }
+      ]
+    },
+
+    kpisPortada() {
+      const d = this.datosActivos
+      return [
+        { key: 'plan',      icono: '📋', valor: '71%',    label: 'Plan Ejecutado',        sub: '17 de 24 cursos',         progreso: 71,  color: '#F5A623', tendencia: 8   },
+        { key: 'cobertura', icono: '👥', valor: '78%',    label: 'Cobertura de Población', sub: '211 de 270 personas',     progreso: 78,  color: '#1847F5', tendencia: 12  },
+        { key: 'horas',     icono: '⏱', valor: '14.2h',  label: 'Horas per Cápita',       sub: 'Promedio anual',          progreso: 59,  color: '#00C896', tendencia: 6   },
+        { key: 'roi',       icono: '📈', valor: d.roi?.pct + '%', label: 'ROI Estimado', sub: 'Beneficio vs inversión',   progreso: 100, color: '#8B5CF6', tendencia: 41  }
+      ]
+    },
+
+    alertasCriticas() {
+      return [
+        { nivel: 'rojo',    mensaje: 'Área Comercial con asistencia crítica (55%)',            area: 'Comercial'      },
+        { nivel: 'rojo',    mensaje: '3 cursos cerrados fuera de plazo este trimestre',        area: 'Múltiples'      },
+        { nivel: 'amarillo', mensaje: 'Excel Avanzado: tasa de aprobación bajo 60%',           area: 'Administración' },
+        { nivel: 'amarillo', mensaje: 'ISO 9001: tiempo de transferencia supera 60 días',      area: 'Calidad'        }
+      ]
+    },
+
+    tablaCursosFiltrada() {
+      const base = [
+        { id: 'c1', nombre: 'Seguridad en el Trabajo', area: 'Operaciones',    universo: 80,  asistieron: 66, noAsistieron: 14, certificados: 58, sinCertificar: 8,  fueraPlazo: 0,  cumplimiento: 82 },
+        { id: 'c2', nombre: 'Liderazgo Efectivo',       area: 'Producción',     universo: 35,  asistieron: 26, noAsistieron: 9,  certificados: 20, sinCertificar: 6,  fueraPlazo: 1,  cumplimiento: 74 },
+        { id: 'c3', nombre: 'Excel Avanzado',            area: 'Administración', universo: 40,  asistieron: 22, noAsistieron: 18, certificados: 14, sinCertificar: 8,  fueraPlazo: 1,  cumplimiento: 55 },
+        { id: 'c4', nombre: 'Atención al Cliente',       area: 'Comercial',      universo: 40,  asistieron: 33, noAsistieron: 7,  certificados: 29, sinCertificar: 4,  fueraPlazo: 0,  cumplimiento: 82 },
+        { id: 'c5', nombre: 'Normativa ISO 9001',        area: 'Calidad',        universo: 34,  asistieron: 28, noAsistieron: 6,  certificados: 22, sinCertificar: 6,  fueraPlazo: 1,  cumplimiento: 82 }
+      ]
+      if (this.filtros.curso !== 'todos') return base.filter(c => c.id === this.filtros.curso)
+      if (this.filtros.area !== 'todas') return base.filter(c => c.area.toLowerCase().includes(this.filtros.area))
+      return base
+    }
+  },
+
+  mounted() {
+    this.$nextTick(() => {
+      this.initCharts()
+    })
+  },
+
+  watch: {
+    tabActivo(newTab) {
+      this.$nextTick(() => {
+        this.destroyCharts()
+        this.initCharts()
+      })
+    },
+    datosActivos: {
+      deep: true,
+      handler() {
+        this.$nextTick(() => {
+          this.destroyCharts()
+          this.initCharts()
+        })
+      }
+    }
+  },
+
+  methods: {
+    // ── Filtros ──────────────────────────
+    onFiltroChange() {
+      this.$emit('filtro-change', { filtros: { ...this.filtros } })
+      // En modo real, el padre hace fetch a Supabase y pasa datosReales
+    },
+
+    toggleAlertas() {
+      this.showAlertas = !this.showAlertas
+    },
+
+    // ── Utilidades visuales ──────────────
+    gaugeColor(pct) {
+      if (pct >= 80) return '#00C896'
+      if (pct >= 60) return '#F5A623'
+      return '#FF4D6D'
+    },
+
+    calcGaugeDash(pct) {
+      const total = 267 // aprox arco semicircular
+      const fill = (pct / 100) * total
+      return `${fill} ${total}`
+    },
+
+    semaforoColor(pct) {
+      if (pct >= 80) return '#00C896'
+      if (pct >= 60) return '#F5A623'
+      return '#FF4D6D'
+    },
+
+    semaforoLabel(pct) {
+      if (pct >= 80) return 'Óptimo'
+      if (pct >= 60) return 'Alerta'
+      return 'Crítico'
+    },
+
+    // ── Charts ───────────────────────────
+    destroyCharts() {
+      Object.values(this._charts).forEach(c => { try { c.destroy() } catch(e) {} })
+      this._charts = {}
+    },
+
+    initCharts() {
+      if (typeof Chart === 'undefined') return
+      const tab = this.tabActivo
+      if (tab === 'reaccion')    this.initChartsReaccion()
+      if (tab === 'aprendizaje') this.initChartsAprendizaje()
+      if (tab === 'conducta')    this.initChartsConducca()
+      if (tab === 'resultados')  this.initChartsResultados()
+    },
+
+    initChartsReaccion() {
+      const d = this.datosActivos
+      if (this.$refs.chartDonut) {
+        this._charts.donut = new Chart(this.$refs.chartDonut, {
+          type: 'doughnut',
+          data: {
+            labels: d.razonesInasistencia.map(r => r.razon),
+            datasets: [{
+              data: d.razonesInasistencia.map(r => r.pct),
+              backgroundColor: this.coloresDonut,
+              borderWidth: 0,
+              hoverOffset: 6
+            }]
+          },
+          options: {
+            responsive: false,
+            cutout: '68%',
+            plugins: {
+              legend: { display: false },
+              tooltip: { callbacks: { label: ctx => ` ${ctx.parsed}%` } }
+            }
+          }
+        })
+      }
+    },
+
+    initChartsAprendizaje() {
+      const d = this.datosActivos
+      if (this.$refs.chartHistograma) {
+        this._charts.histograma = new Chart(this.$refs.chartHistograma, {
+          type: 'bar',
+          data: {
+            labels: ['0-49%', '50-59%', '60-69%', '70-79%', '80-89%', '90-100%'],
+            datasets: [
+              {
+                label: 'Reprobados',
+                data: [8, 12, 0, 0, 0, 0],
+                backgroundColor: '#FF4D6D88',
+                borderColor: '#FF4D6D',
+                borderWidth: 1,
+                borderRadius: 4
+              },
+              {
+                label: 'Aprobados',
+                data: [0, 0, 28, 45, 52, 31],
+                backgroundColor: '#00C89688',
+                borderColor: '#00C896',
+                borderWidth: 1,
+                borderRadius: 4
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                labels: { color: '#8888aa', font: { family: 'Outfit', size: 12 } }
+              }
+            },
+            scales: {
+              x: { stacked: false, ticks: { color: '#8888aa' }, grid: { color: '#1a2040' } },
+              y: { ticks: { color: '#8888aa' }, grid: { color: '#1a2040' } }
+            }
+          }
+        })
+      }
+    },
+
+    initChartsConducca() {
+      const d = this.datosActivos
+      if (this.$refs.chartTransferencia) {
+        this._charts.transferencia = new Chart(this.$refs.chartTransferencia, {
+          type: 'bar',
+          data: {
+            labels: d.tiempoTransferencia.map(c => c.nombre.substring(0, 18) + '…'),
+            datasets: [{
+              label: 'Índice de Transferencia %',
+              data: [78, 62, 85, 71, 55],
+              backgroundColor: ['#00C89688', '#F5A62388', '#00C89688', '#1847F588', '#FF4D6D88'],
+              borderColor:     ['#00C896',   '#F5A623',   '#00C896',   '#1847F5',   '#FF4D6D'  ],
+              borderWidth: 1,
+              borderRadius: 6
+            }]
+          },
+          options: {
+            responsive: true,
+            indexAxis: 'y',
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { min: 0, max: 100, ticks: { color: '#8888aa', callback: v => v + '%' }, grid: { color: '#1a2040' } },
+              y: { ticks: { color: '#c0c0d0', font: { size: 11 } }, grid: { display: false } }
+            }
+          }
+        })
+      }
+      // Radars 360
+      d.evidencia360.forEach(ev => {
+        const refKey = 'chartRadar_' + ev.id
+        const el = this.$refs[refKey]
+        if (!el) return
+        this._charts['radar_' + ev.id] = new Chart(el, {
+          type: 'radar',
+          data: {
+            labels: ev.dimensiones,
+            datasets: [
+              {
+                label: 'Pre-Capacitación',
+                data: ev.preCapacitacion,
+                backgroundColor: 'rgba(255,77,109,0.15)',
+                borderColor: '#FF4D6D',
+                pointBackgroundColor: '#FF4D6D',
+                borderWidth: 2
+              },
+              {
+                label: 'Post-Capacitación',
+                data: ev.postCapacitacion,
+                backgroundColor: 'rgba(24,71,245,0.2)',
+                borderColor: '#1847F5',
+                pointBackgroundColor: '#1847F5',
+                borderWidth: 2
+              }
+            ]
+          },
+          options: {
+            responsive: false,
+            scales: {
+              r: {
+                min: 0, max: 5, ticks: { stepSize: 1, color: '#8888aa', backdropColor: 'transparent' },
+                grid: { color: '#1a2040' },
+                pointLabels: { color: '#c0c0d0', font: { size: 11 } }
+              }
+            },
+            plugins: {
+              legend: { labels: { color: '#c0c0d0', font: { size: 11 } } }
+            }
+          }
+        })
+      })
+    },
+
+    initChartsResultados() {
+      const d = this.datosActivos
+      if (this.$refs.chartHoras) {
+        this._charts.horas = new Chart(this.$refs.chartHoras, {
+          type: 'bar',
+          data: {
+            labels: d.semaforoPorArea.map(a => a.nombre),
+            datasets: [{
+              label: 'Horas capacitadas',
+              data: d.semaforoPorArea.map(a => a.horas),
+              backgroundColor: '#1847F566',
+              borderColor: '#1847F5',
+              borderWidth: 1,
+              borderRadius: 6
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { ticks: { color: '#8888aa', font: { size: 11 } }, grid: { color: '#1a2040' } },
+              y: { ticks: { color: '#8888aa' }, grid: { color: '#1a2040' } }
+            }
+          }
+        })
+      }
+      if (this.$refs.chartPlanAnual) {
+        this._charts.planAnual = new Chart(this.$refs.chartPlanAnual, {
+          type: 'doughnut',
+          data: {
+            labels: d.planAnual.map(p => p.label),
+            datasets: [{
+              data: d.planAnual.map(p => p.pct),
+              backgroundColor: d.planAnual.map(p => p.color + '99'),
+              borderColor: d.planAnual.map(p => p.color),
+              borderWidth: 2,
+              hoverOffset: 8
+            }]
+          },
+          options: {
+            responsive: true,
+            cutout: '55%',
+            plugins: {
+              legend: {
+                position: 'bottom',
+                labels: { color: '#c0c0d0', font: { size: 11 }, padding: 12 }
+              }
+            }
+          }
+        })
+      }
+    }
+  }
+}
+
+    // Montar la app Vue
+    const app = Vue.createApp(AppComponent)
+    app.mount('#app')
+  <\/script>
+</body>
+</html>
