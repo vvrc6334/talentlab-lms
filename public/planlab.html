@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --navy:#060d1f; --navy2:#0a1628; --navy3:#0f1f3d; --navy4:#162040;
+  --navy:#0c1a3a; --navy2:#0f2145; --navy3:#152a52; --navy4:#1a305f;
   --blue:#1847F5; --blue2:#2d5bf7; --green:#00C896; --red:#FF4D6D; --gold:#F5A623;
   --white:#fff; --text:#e2e8f0; --muted:#7a8ba8; --border:#1a2d50;
   --fhead:"Bricolage Grotesque",sans-serif; --fbody:"Outfit",sans-serif;
@@ -233,7 +233,7 @@ section{padding:100px 60px}
 .stat-lbl{font-size:12px;color:var(--muted)}
 
 /* ---- PRICING ---- */
-.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--border);border:1px solid var(--border);border-radius:var(--rlg);overflow:hidden;max-width:960px;margin:56px auto 0}
+.pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:var(--border);border:1px solid var(--border);border-radius:var(--rlg);overflow:hidden;max-width:960px;margin:56px auto 0}
 .price-card{background:var(--navy2);padding:38px 34px;position:relative;overflow:hidden}
 .price-card.feat{background:var(--navy3)}
 .price-card.feat::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--green))}
@@ -307,7 +307,7 @@ footer{background:var(--navy);border-top:1px solid var(--border);padding:56px 60
   .spotlight,.demo-inner{grid-template-columns:1fr;gap:40px}
   .spotlight.flip{direction:ltr}
   .feat-grid{grid-template-columns:1fr 1fr}
-  .pricing-grid{grid-template-columns:1fr;max-width:480px}
+  .pricing-grid{grid-template-columns:1fr 1fr;max-width:760px}
   .stats-grid{grid-template-columns:repeat(2,1fr)}
   .footer-grid{grid-template-columns:1fr 1fr;gap:28px}
   .dash-layout{grid-template-columns:1fr}
@@ -633,13 +633,43 @@ footer{background:var(--navy);border-top:1px solid var(--border);padding:56px 60
       <h2 class="section-title">Planes para organizaciones<br><em>que miden resultados</em></h2>
       <p class="section-sub" style="margin:0 auto">Sin contratos anuales forzados. Sin costos ocultos. Onboarding y soporte incluidos en todos los planes.</p>
     </div>
+    <!-- Toggle facturación -->
+    <div class="billing-toggle reveal" style="display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:36px;font-size:14px">
+      <span id="lbl-sem" style="font-weight:600;color:var(--white)">Semestral</span>
+      <div class="toggle-track" id="billing-toggle" onclick="toggleBilling()" style="width:48px;height:26px;background:var(--border);border-radius:50px;position:relative;cursor:pointer;transition:background .2s">
+        <div id="toggle-knob" style="position:absolute;top:3px;left:3px;width:20px;height:20px;background:var(--blue);border-radius:50%;transition:transform .2s"></div>
+      </div>
+      <span id="lbl-mes" style="color:var(--muted)">Mensual <span style="font-size:11px;background:rgba(245,166,35,.15);color:var(--gold);border-radius:20px;padding:2px 8px;margin-left:4px">+20%</span></span>
+    </div>
+
     <div class="pricing-grid reveal">
+      <!-- FREE -->
+      <div class="price-card" style="border-top:3px solid var(--green)">
+        <div class="price-tier" style="color:var(--green)">Gratis · 3 meses</div>
+        <div class="price-name">Free</div>
+        <div class="price-desc">Para conocer la plataforma sin costo. Ideal para equipos pequeños que quieren probar antes de comprometerse.</div>
+        <div class="price-amount" style="color:var(--green)">$0</div>
+        <div class="price-period">Hasta 50 usuarios · 3 meses · sin renovación automática</div>
+        <a href="#demo" class="price-btn" style="background:rgba(0,200,150,.12);color:var(--green);border:1px solid rgba(0,200,150,.3);display:block;width:100%;padding:12px;border-radius:50px;text-align:center;font-family:var(--fbody);font-size:13px;font-weight:600;cursor:none;transition:all .2s;text-decoration:none;margin-bottom:24px">Comenzar gratis</a>
+        <div class="pf-list">
+          <div class="pf"><span class="pf-y">✓</span>LMS completo, cursos ilimitados</div>
+          <div class="pf"><span class="pf-y">✓</span>Hasta 50 usuarios (no ampliable)</div>
+          <div class="pf"><span class="pf-y">✓</span>Dashboard Kirkpatrick N1 básico</div>
+          <div class="pf"><span class="pf-y">✓</span>Certificados digitales automáticos</div>
+          <div class="pf"><span class="pf-n">✗</span><span style="opacity:.4">Carga masiva de usuarios CSV</span></div>
+          <div class="pf"><span class="pf-n">✗</span><span style="opacity:.4">Usuarios adicionales</span></div>
+          <div class="pf"><span class="pf-n">✗</span><span style="opacity:.4">IA y reportes avanzados</span></div>
+          <div class="pf" style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);gap:6px"><span>ℹ</span>Carga de usuarios manual únicamente. Por Ley de Datos, las cargas masivas se validan y procesan en ~24h hábiles.</div>
+        </div>
+      </div>
+
       <div class="price-card">
         <div class="price-tier">Essential</div>
         <div class="price-name">Starter</div>
         <div class="price-desc">Para organizaciones que quieren digitalizar capacitación y comenzar a medir resultados.</div>
-        <div class="price-amount">USD <small>$</small>490<small>/mes</small></div>
-        <div class="price-period">Hasta 150 usuarios · facturación mensual</div>
+        <div class="price-amount"><span class="price-sem">USD <small>$</small>390<small>/mes</small></span><span class="price-mes" style="display:none">USD <small>$</small>468<small>/mes</small></span></div>
+        <div class="price-period"><span class="period-sem">Facturado semestralmente · $2.340 total</span><span class="period-mes" style="display:none">Facturación mensual</span></div>
+        <div class="price-period" style="margin-top:4px">Hasta 100 usuarios · usuarios adicionales disponibles</div>
         <a href="#demo" class="price-btn pb-outline">Solicitar demo</a>
         <div class="pf-list">
           <div class="pf"><span class="pf-y">✓</span>LMS completo, cursos ilimitados</div>
@@ -657,8 +687,9 @@ footer{background:var(--navy);border-top:1px solid var(--border);padding:56px 60
         <div class="price-tier g">Intelligence</div>
         <div class="price-name">Pro</div>
         <div class="price-desc">Para empresas que quieren impacto real medido con Kirkpatrick completo e IA integrada.</div>
-        <div class="price-amount">USD <small>$</small>990<small>/mes</small></div>
-        <div class="price-period">Hasta 500 usuarios · facturación mensual</div>
+        <div class="price-amount"><span class="price-sem">USD <small>$</small>790<small>/mes</small></span><span class="price-mes" style="display:none">USD <small>$</small>948<small>/mes</small></span></div>
+        <div class="price-period"><span class="period-sem">Facturado semestralmente · $4.740 total</span><span class="period-mes" style="display:none">Facturación mensual</span></div>
+        <div class="price-period" style="margin-top:4px">Hasta 250 usuarios · usuarios adicionales disponibles</div>
         <a href="#demo" class="price-btn pb-primary">Solicitar demo</a>
         <div class="pf-list">
           <div class="pf"><span class="pf-y">✓</span>Todo en Starter</div>
@@ -812,6 +843,25 @@ function enviar(){
     document.getElementById('form-content').style.display='none';
     document.getElementById('fsuccess').style.display='block';
   },700);
+}
+
+
+// ── Billing toggle ─────────────────────────
+let isMensual = false;
+function toggleBilling(){
+  isMensual = !isMensual;
+  const knob = document.getElementById('toggle-knob');
+  const track = document.getElementById('billing-toggle');
+  const lblSem = document.getElementById('lbl-sem');
+  const lblMes = document.getElementById('lbl-mes');
+  knob.style.transform = isMensual ? 'translateX(22px)' : 'translateX(0)';
+  track.style.background = isMensual ? 'var(--blue)' : 'var(--border)';
+  lblSem.style.color = isMensual ? 'var(--muted)' : 'var(--white)';
+  lblSem.style.fontWeight = isMensual ? '400' : '600';
+  const semEls = document.querySelectorAll('.price-sem, .period-sem');
+  const mesEls = document.querySelectorAll('.price-mes, .period-mes');
+  semEls.forEach(el => el.style.display = isMensual ? 'none' : '');
+  mesEls.forEach(el => el.style.display = isMensual ? '' : 'none');
 }
 
 // Smooth scroll
