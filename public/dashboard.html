@@ -5,17 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Kirkpatrick — TalentLab</title>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/vue@3.4.21/dist/vue.global.prod.js"><\/script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"><\/script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@3.4.21/dist/vue.global.prod.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #080d1e; }
-    /* ═══════════════════════════════════════════════
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { background: #080d1e; min-height: 100vh; }
+/* ═══════════════════════════════════════════════
    KIRKPATRICK DASHBOARD — TalentLab Design System
    Vue 3 Options API · Scoped CSS
 ═══════════════════════════════════════════════ */
-
-
 
 :root {
   --tl-blue:    #1847F5;
@@ -695,7 +693,7 @@
 </head>
 <body>
   <div id="app">
-    <div class="kirk-dashboard" :class="'periodo-' + filtros.periodo">
+<div class="kirk-dashboard" :class="'periodo-' + filtros.periodo">
 
     <!-- ══════════════════════════════════════
          HEADER
@@ -1323,9 +1321,8 @@
 
   </div>
   </div>
-
   <script>
-    const AppComponent = {
+const KirkpatrickApp = {
   name: 'KirkpatrickDashboard',
 
   props: {
@@ -1854,9 +1851,10 @@
   }
 }
 
-    // Montar la app Vue
-    const app = Vue.createApp(AppComponent)
-    app.mount('#app')
-  <\/script>
+    // Montar Vue 3
+    const { createApp } = Vue;
+    const app = createApp(KirkpatrickApp);
+    app.mount('#app');
+  </script>
 </body>
 </html>
