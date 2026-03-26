@@ -1,0 +1,2387 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PlanLab — Intelligence People Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   PLANLAB — INTELLIGENCE PEOPLE PLATFORM
+   Design: Dark Cinematic Luxury
+   Fonts: Syne (headings) + DM Sans (body)
+═══════════════════════════════════════════ */
+
+:root {
+  --ink:     #04060f;
+  --ink2:    #080d1c;
+  --ink3:    #0d1428;
+  --blue:    #1847F5;
+  --blue2:   #0f35d4;
+  --glow:    #1847F5;
+  --green:   #00C896;
+  --gold:    #F5C842;
+  --red:     #FF4D6D;
+  --border:  rgba(255,255,255,.07);
+  --border2: rgba(255,255,255,.12);
+  --text:    #e8edf8;
+  --muted:   #6b7a99;
+  --muted2:  #9aaac8;
+  --white:   #ffffff;
+  --font-h:  'Syne', sans-serif;
+  --font-b:  'DM Sans', sans-serif;
+  --r:       14px;
+  --r2:      22px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-b);
+  background: var(--ink);
+  color: var(--text);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ─── CUSTOM CURSOR ─── */
+#cursor {
+  width: 12px; height: 12px;
+  background: var(--blue);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform .15s ease, background .2s;
+  mix-blend-mode: difference;
+}
+#cursor-ring {
+  width: 36px; height: 36px;
+  border: 1.5px solid rgba(24,71,245,.5);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9998;
+  transition: transform .4s cubic-bezier(.16,1,.3,1), opacity .3s;
+}
+body:hover #cursor { transform: translate(-50%,-50%); }
+
+/* ─── NOISE TEXTURE ─── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+  opacity: .4;
+}
+
+/* ─── NAV ─── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 20px 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background .4s, backdrop-filter .4s, border-bottom .4s;
+}
+nav.scrolled {
+  background: rgba(4,6,15,.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+.nav-logo-mark {
+  width: 36px; height: 36px;
+  background: var(--blue);
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-h);
+  font-weight: 800; font-size: 14px; color: #fff;
+  letter-spacing: -1px;
+}
+.nav-logo-name {
+  font-family: var(--font-h);
+  font-weight: 700; font-size: 18px;
+  color: var(--white);
+  letter-spacing: -0.5px;
+}
+.nav-logo-sup {
+  font-size: 10px;
+  color: var(--green);
+  font-weight: 500;
+  margin-left: 2px;
+  vertical-align: super;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  list-style: none;
+}
+.nav-links a {
+  color: var(--muted2);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color .2s;
+  letter-spacing: .2px;
+}
+.nav-links a:hover { color: var(--white); }
+
+.nav-lang {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.lang-btn {
+  background: none;
+  border: 1px solid var(--border2);
+  color: var(--muted2);
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-family: var(--font-b);
+  cursor: pointer;
+  transition: all .2s;
+}
+.lang-btn.active, .lang-btn:hover {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: white;
+}
+
+.nav-cta {
+  background: var(--blue);
+  color: white;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-family: var(--font-b);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .2s;
+  letter-spacing: .2px;
+}
+.nav-cta:hover {
+  background: var(--blue2);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(24,71,245,.4);
+}
+
+/* ─── HERO ─── */
+#hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 120px 40px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Grid lines background */
+#hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(24,71,245,.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(24,71,245,.06) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+}
+
+/* Glow orbs */
+.hero-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(80px);
+}
+.orb-1 {
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(24,71,245,.18) 0%, transparent 70%);
+  top: -100px; left: 50%;
+  transform: translateX(-50%);
+  animation: orbPulse1 8s ease-in-out infinite;
+}
+.orb-2 {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(0,200,150,.1) 0%, transparent 70%);
+  bottom: 0; right: 10%;
+  animation: orbPulse2 11s ease-in-out infinite;
+}
+.orb-3 {
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(245,200,66,.08) 0%, transparent 70%);
+  bottom: 20%; left: 5%;
+  animation: orbPulse1 9s ease-in-out infinite reverse;
+}
+
+@keyframes orbPulse1 {
+  0%,100% { transform: translateX(-50%) scale(1); opacity: .8; }
+  50% { transform: translateX(-50%) scale(1.15); opacity: 1; }
+}
+@keyframes orbPulse2 {
+  0%,100% { transform: scale(1) translateY(0); }
+  50% { transform: scale(1.1) translateY(-20px); }
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(24,71,245,.12);
+  border: 1px solid rgba(24,71,245,.3);
+  border-radius: 100px;
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #8eb4ff;
+  margin-bottom: 36px;
+  position: relative;
+  z-index: 2;
+  animation: fadeDown .8s .2s both ease;
+}
+.badge-dot {
+  width: 6px; height: 6px;
+  background: var(--green);
+  border-radius: 50%;
+  animation: blink 2s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+.hero-title {
+  font-family: var(--font-h);
+  font-size: clamp(52px, 7vw, 96px);
+  font-weight: 800;
+  line-height: .95;
+  letter-spacing: -3px;
+  margin-bottom: 28px;
+  position: relative;
+  z-index: 2;
+  animation: fadeDown .9s .3s both ease;
+}
+.hero-title .line-1 { color: var(--white); display: block; }
+.hero-title .line-2 {
+  display: block;
+  background: linear-gradient(135deg, #1847F5 0%, #00C896 60%, #F5C842 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientShift 6s ease infinite;
+  background-size: 200% 200%;
+}
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.hero-sub {
+  font-size: clamp(17px, 2vw, 21px);
+  color: var(--muted2);
+  max-width: 600px;
+  line-height: 1.6;
+  margin-bottom: 44px;
+  font-weight: 300;
+  position: relative;
+  z-index: 2;
+  animation: fadeDown .9s .45s both ease;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 2;
+  animation: fadeDown .9s .55s both ease;
+}
+
+.btn-primary {
+  background: var(--blue);
+  color: white;
+  border: none;
+  padding: 15px 32px;
+  border-radius: 10px;
+  font-family: var(--font-b);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .25s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,.1), transparent);
+  opacity: 0;
+  transition: opacity .2s;
+}
+.btn-primary:hover::before { opacity: 1; }
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(24,71,245,.5);
+}
+
+.btn-ghost {
+  background: rgba(255,255,255,.05);
+  color: var(--text);
+  border: 1px solid var(--border2);
+  padding: 15px 32px;
+  border-radius: 10px;
+  font-family: var(--font-b);
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .25s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-ghost:hover {
+  background: rgba(255,255,255,.09);
+  border-color: rgba(255,255,255,.2);
+}
+
+.hero-trusted {
+  margin-top: 60px;
+  position: relative;
+  z-index: 2;
+  animation: fadeDown .9s .7s both ease;
+}
+.trusted-label {
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 18px;
+}
+.trusted-logos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+.trusted-logo {
+  font-family: var(--font-h);
+  font-size: 15px;
+  font-weight: 700;
+  color: rgba(255,255,255,.2);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: color .2s;
+}
+.trusted-logo:hover { color: rgba(255,255,255,.4); }
+
+/* ─── PRODUCT MOCKUP ANIMADO ─── */
+.hero-mockup {
+  width: 100%;
+  max-width: 1100px;
+  margin: 70px auto 0;
+  position: relative;
+  z-index: 2;
+  animation: fadeUp 1.2s .6s both ease;
+}
+
+.mockup-glow {
+  position: absolute;
+  inset: -40px;
+  background: radial-gradient(ellipse 80% 50% at 50% 100%, rgba(24,71,245,.2), transparent 70%);
+  pointer-events: none;
+}
+
+.mockup-window {
+  background: var(--ink2);
+  border: 1px solid var(--border2);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.04),
+    0 40px 120px rgba(0,0,0,.8),
+    0 0 60px rgba(24,71,245,.12);
+}
+
+.mockup-titlebar {
+  background: var(--ink3);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.titlebar-dot {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+}
+.titlebar-url {
+  flex: 1;
+  background: rgba(255,255,255,.05);
+  border-radius: 6px;
+  padding: 5px 12px;
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0 20px;
+  text-align: center;
+}
+
+/* Dashboard simulado dentro del mockup */
+.mockup-content {
+  padding: 0;
+  height: 520px;
+  position: relative;
+  overflow: hidden;
+  background: #080d1c;
+}
+
+/* Pantallas que van rotando */
+.mockup-screen {
+  position: absolute;
+  inset: 0;
+  padding: 20px;
+  opacity: 0;
+  transition: opacity .8s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.mockup-screen.active { opacity: 1; }
+
+/* Screen 1 — Dashboard gerencial */
+.screen-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.screen-title {
+  font-family: var(--font-h);
+  font-size: 18px;
+  font-weight: 700;
+}
+.screen-pills {
+  display: flex;
+  gap: 8px;
+}
+.screen-pill {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px solid;
+}
+
+.mock-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.mock-kpi {
+  background: rgba(255,255,255,.04);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  animation: countUp 2s ease both;
+}
+.mock-kpi-val {
+  font-family: var(--font-h);
+  font-size: 24px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+.mock-kpi-label { font-size: 11px; color: var(--muted); }
+.mock-kpi-trend {
+  font-size: 11px;
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+.mock-charts {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 12px;
+  flex: 1;
+}
+.mock-chart-card {
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  overflow: hidden;
+  position: relative;
+}
+.mock-chart-title { font-size: 11px; color: var(--muted); margin-bottom: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
+
+/* Barras animadas */
+.bars-wrap { display: flex; align-items: flex-end; gap: 6px; height: 80px; }
+.bar {
+  flex: 1;
+  border-radius: 4px 4px 0 0;
+  animation: barGrow 1.2s ease both;
+  transform-origin: bottom;
+}
+@keyframes barGrow {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+
+/* Donut simulado */
+.donut-fake {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: conic-gradient(var(--green) 0% 65%, var(--blue) 65% 82%, var(--gold) 82% 100%);
+  margin: 0 auto;
+  position: relative;
+}
+.donut-fake::after {
+  content: '78%';
+  position: absolute;
+  inset: 18px;
+  background: var(--ink2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: var(--font-h);
+  color: var(--green);
+}
+
+/* Screen 2 — Participante / logros */
+.mock-profile {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.mock-avatar {
+  width: 48px; height: 48px;
+  background: linear-gradient(135deg, var(--blue), var(--green));
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-h);
+  font-weight: 800; font-size: 18px;
+}
+.mock-progress-wrap {
+  flex: 1;
+}
+.mock-progress-label { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+.mock-progress-bar {
+  height: 6px;
+  background: rgba(255,255,255,.08);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+.mock-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--blue), var(--green));
+  border-radius: 6px;
+  animation: progressFill 2s 1s both ease;
+}
+@keyframes progressFill { from { width: 0; } }
+
+.mock-badges {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.mock-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  flex: 1;
+  min-width: 80px;
+}
+.badge-icon { font-size: 24px; }
+.badge-name { font-size: 10px; color: var(--muted2); text-align: center; font-weight: 500; }
+.badge-earned { font-size: 9px; color: var(--green); }
+
+.mock-courses-list { display: flex; flex-direction: column; gap: 8px; flex: 1; overflow: hidden; }
+.mock-course-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.mock-course-thumb {
+  width: 40px; height: 40px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+.mock-course-info { flex: 1; }
+.mock-course-name { font-size: 12px; font-weight: 600; margin-bottom: 4px; }
+.mock-course-prog { font-size: 10px; color: var(--muted); }
+.mock-course-pct { font-size: 12px; font-weight: 700; }
+
+/* Screen 3 — Creación de cursos IA */
+.mock-ai-prompt {
+  background: rgba(24,71,245,.08);
+  border: 1px solid rgba(24,71,245,.2);
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.mock-ai-icon { font-size: 20px; }
+.mock-ai-text { font-size: 13px; color: var(--muted2); font-style: italic; }
+.mock-ai-cursor {
+  width: 2px; height: 16px;
+  background: var(--blue);
+  animation: cursor .8s infinite;
+}
+@keyframes cursor { 0%,100%{opacity:1} 50%{opacity:0} }
+
+.mock-modules { display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.mock-module {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.module-num {
+  width: 24px; height: 24px;
+  background: var(--blue);
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.module-info { flex: 1; }
+.module-name { font-size: 12px; font-weight: 600; margin-bottom: 2px; }
+.module-meta { font-size: 10px; color: var(--muted); }
+.module-status {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 20px;
+}
+
+/* Indicador de pantalla activa */
+.screen-indicators {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  z-index: 10;
+}
+.screen-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.2);
+  transition: all .3s;
+  cursor: pointer;
+}
+.screen-dot.active {
+  width: 24px;
+  border-radius: 3px;
+  background: var(--blue);
+}
+
+/* ─── SECCIÓN: STATS ─── */
+#stats {
+  padding: 60px 60px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(24,71,245,.04) 0%, transparent 100%);
+}
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+  max-width: 1100px;
+  margin: 0 auto;
+  text-align: center;
+}
+.stat-item {}
+.stat-num {
+  font-family: var(--font-h);
+  font-size: 48px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--white), rgba(255,255,255,.6));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -2px;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.stat-label { font-size: 15px; color: var(--muted2); font-weight: 400; }
+
+/* ─── FEATURES SECTIONS ─── */
+.section {
+  padding: 120px 60px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.eyebrow-line {
+  width: 32px; height: 2px;
+  background: var(--blue);
+  border-radius: 2px;
+}
+.eyebrow-text {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--blue);
+}
+
+.section-title {
+  font-family: var(--font-h);
+  font-size: clamp(36px, 4.5vw, 58px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -1.5px;
+  margin-bottom: 20px;
+}
+.section-title em {
+  font-style: normal;
+  background: linear-gradient(135deg, var(--blue), var(--green));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.section-sub {
+  font-size: 18px;
+  color: var(--muted2);
+  max-width: 560px;
+  line-height: 1.65;
+  font-weight: 300;
+  margin-bottom: 60px;
+}
+
+/* Feature layout: texto + visual alternado */
+.feature-block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+  padding: 100px 60px;
+  max-width: 1200px;
+  margin: 0 auto;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity .8s ease, transform .8s ease;
+}
+.feature-block.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.feature-block.reverse { direction: rtl; }
+.feature-block.reverse > * { direction: ltr; }
+
+.feature-text {}
+.feature-visual {
+  background: var(--ink2);
+  border: 1px solid var(--border2);
+  border-radius: var(--r2);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Visuales de features — mockups específicos */
+.fv-dashboard {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 380px;
+}
+.fv-kpis {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+.fv-kpi {
+  background: rgba(255,255,255,.04);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+}
+.fv-kpi-val {
+  font-family: var(--font-h);
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+.fv-kpi-lbl { font-size: 11px; color: var(--muted); }
+.fv-chart-area {
+  background: rgba(255,255,255,.02);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.fv-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  flex: 1;
+  padding-top: 10px;
+}
+.fv-bar-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  height: 100%;
+  justify-content: flex-end;
+}
+.fv-bar {
+  width: 100%;
+  border-radius: 4px 4px 0 0;
+  animation: barGrow 1.5s ease both;
+  transform-origin: bottom;
+}
+.fv-bar-lbl { font-size: 9px; color: var(--muted); }
+
+/* Visual participante */
+.fv-participant {
+  padding: 24px;
+  min-height: 380px;
+}
+.fv-participant-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+.fv-avatar {
+  width: 56px; height: 56px;
+  background: linear-gradient(135deg, #1847F5, #00C896);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-h);
+  font-weight: 800; font-size: 22px;
+}
+.fv-user-name { font-family: var(--font-h); font-size: 17px; font-weight: 700; margin-bottom: 3px; }
+.fv-user-role { font-size: 12px; color: var(--muted); }
+.fv-xp-bar {
+  background: rgba(255,255,255,.06);
+  border-radius: 100px;
+  height: 8px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+.fv-xp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--blue), var(--green));
+  border-radius: 100px;
+  width: 72%;
+  animation: progressFill 2s 1.5s both ease;
+}
+.fv-achievements {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.fv-achievement {
+  background: rgba(255,255,255,.04);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 10px;
+  text-align: center;
+  transition: transform .2s, border-color .2s;
+}
+.fv-achievement:hover {
+  transform: translateY(-3px);
+  border-color: rgba(24,71,245,.4);
+}
+.fv-ach-icon { font-size: 26px; margin-bottom: 6px; }
+.fv-ach-name { font-size: 10px; color: var(--muted2); }
+.fv-ach-pts { font-size: 11px; color: var(--gold); font-weight: 600; }
+
+/* Visual cursos IA */
+.fv-ai-creator {
+  padding: 24px;
+  min-height: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.fv-ai-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: rgba(24,71,245,.08);
+  border: 1px solid rgba(24,71,245,.2);
+  border-radius: 10px;
+}
+.fv-ai-label { font-size: 12px; color: #8eb4ff; font-weight: 500; }
+.fv-ai-typing { font-size: 13px; color: var(--muted2); }
+.fv-ai-modules { display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.fv-ai-module {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  animation: slideInLeft .5s ease both;
+}
+.fv-mod-num {
+  width: 22px; height: 22px;
+  background: var(--blue);
+  border-radius: 5px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700;
+  flex-shrink: 0;
+}
+.fv-mod-name { font-size: 12px; font-weight: 500; flex: 1; }
+.fv-mod-tag {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+.fv-eval-preview {
+  background: rgba(0,200,150,.06);
+  border: 1px solid rgba(0,200,150,.2);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.fv-eval-title { font-size: 11px; color: var(--green); font-weight: 600; margin-bottom: 8px; text-transform: uppercase; letter-spacing: .5px; }
+.fv-eval-q { font-size: 12px; color: var(--muted2); margin-bottom: 8px; }
+.fv-eval-opts { display: flex; flex-direction: column; gap: 4px; }
+.fv-eval-opt {
+  font-size: 11px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  background: rgba(255,255,255,.03);
+  color: var(--muted);
+}
+.fv-eval-opt.correct {
+  background: rgba(0,200,150,.1);
+  color: var(--green);
+  border: 1px solid rgba(0,200,150,.2);
+}
+
+/* Feature cards de benefits */
+.feature-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.feature-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  transition: all .2s;
+}
+.feature-card:hover {
+  background: rgba(255,255,255,.05);
+  border-color: rgba(24,71,245,.3);
+  transform: translateX(4px);
+}
+.fc-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.fc-title { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+.fc-desc { font-size: 13px; color: var(--muted2); line-height: 1.5; }
+
+/* ─── MARQUEE ─── */
+.marquee-section {
+  padding: 40px 0;
+  overflow: hidden;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: rgba(24,71,245,.03);
+}
+.marquee-track {
+  display: flex;
+  gap: 40px;
+  animation: marquee 20s linear infinite;
+  white-space: nowrap;
+}
+.marquee-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--muted);
+  font-weight: 500;
+  flex-shrink: 0;
+}
+.marquee-item span { color: var(--blue); font-size: 16px; }
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ─── PRICING ─── */
+#pricing {
+  padding: 120px 60px;
+  position: relative;
+  overflow: hidden;
+}
+#pricing::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 800px; height: 400px;
+  background: radial-gradient(ellipse, rgba(24,71,245,.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.pricing-header {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto 70px;
+}
+.pricing-header .section-sub { margin: 0 auto; }
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.price-card {
+  background: var(--ink2);
+  border: 1px solid var(--border);
+  border-radius: var(--r2);
+  padding: 36px 32px;
+  position: relative;
+  transition: transform .25s, border-color .25s, box-shadow .25s;
+  display: flex;
+  flex-direction: column;
+}
+.price-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(24,71,245,.3);
+  box-shadow: 0 20px 60px rgba(0,0,0,.4);
+}
+.price-card.featured {
+  border-color: var(--blue);
+  background: linear-gradient(180deg, rgba(24,71,245,.1) 0%, var(--ink2) 40%);
+  box-shadow: 0 0 0 1px rgba(24,71,245,.2), 0 20px 60px rgba(24,71,245,.15);
+}
+
+.price-badge {
+  position: absolute;
+  top: -12px; left: 50%;
+  transform: translateX(-50%);
+  background: var(--blue);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 16px;
+  border-radius: 100px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+.price-tier {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+.price-name {
+  font-family: var(--font-h);
+  font-size: 26px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+.price-desc {
+  font-size: 14px;
+  color: var(--muted2);
+  line-height: 1.5;
+  margin-bottom: 28px;
+}
+.price-amount {
+  margin-bottom: 28px;
+}
+.price-custom {
+  font-family: var(--font-h);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--white);
+}
+.price-note {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.price-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+  margin-bottom: 32px;
+}
+.price-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--muted2);
+}
+.pf-check {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.pf-check.yes { background: rgba(0,200,150,.15); color: var(--green); }
+.pf-check.ai  { background: rgba(24,71,245,.15); color: var(--blue); }
+
+.price-ia-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(24,71,245,.08);
+  border: 1px solid rgba(24,71,245,.2);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: #8eb4ff;
+  margin-bottom: 16px;
+}
+
+.price-cta {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  font-family: var(--font-b);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .2s;
+  border: none;
+}
+.price-cta.primary {
+  background: var(--blue);
+  color: white;
+}
+.price-cta.primary:hover {
+  background: var(--blue2);
+  box-shadow: 0 8px 24px rgba(24,71,245,.4);
+}
+.price-cta.outline {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border2);
+}
+.price-cta.outline:hover {
+  background: rgba(255,255,255,.05);
+  border-color: rgba(255,255,255,.2);
+}
+
+/* ─── DEMO FORM ─── */
+#demo {
+  padding: 120px 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+.demo-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+
+.demo-info {}
+.demo-info .section-title { margin-bottom: 16px; }
+.demo-info .section-sub { margin-bottom: 40px; }
+
+.demo-benefits {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.demo-benefit {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 15px;
+  color: var(--muted2);
+}
+.db-icon {
+  width: 32px; height: 32px;
+  background: rgba(24,71,245,.1);
+  border: 1px solid rgba(24,71,245,.2);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.demo-form-wrap {
+  background: var(--ink2);
+  border: 1px solid var(--border2);
+  border-radius: var(--r2);
+  padding: 40px;
+}
+.form-title {
+  font-family: var(--font-h);
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.form-subtitle {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 28px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.form-group.full { grid-column: 1 / -1; }
+
+.form-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted2);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+.form-input, .form-select, .form-textarea {
+  background: rgba(255,255,255,.04);
+  border: 1px solid var(--border2);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-family: var(--font-b);
+  font-size: 14px;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+  width: 100%;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(24,71,245,.12);
+}
+.form-input::placeholder, .form-textarea::placeholder { color: var(--muted); }
+.form-select option { background: var(--ink2); }
+.form-textarea { resize: vertical; min-height: 90px; }
+
+.form-submit {
+  width: 100%;
+  padding: 15px;
+  background: var(--blue);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-family: var(--font-b);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .25s;
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.form-submit:hover {
+  background: var(--blue2);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 36px rgba(24,71,245,.45);
+}
+.form-submit:disabled {
+  opacity: .7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.form-success {
+  text-align: center;
+  padding: 40px 20px;
+  display: none;
+}
+.success-icon { font-size: 56px; margin-bottom: 20px; }
+.success-title {
+  font-family: var(--font-h);
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.success-msg { font-size: 15px; color: var(--muted2); line-height: 1.6; }
+
+/* ─── FOOTER ─── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 60px 60px 40px;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 60px;
+  max-width: 1100px;
+  margin: 0 auto 60px;
+}
+.footer-brand .nav-logo { margin-bottom: 16px; }
+.footer-desc { font-size: 14px; color: var(--muted); line-height: 1.6; max-width: 280px; }
+.footer-col-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin-bottom: 18px; }
+.footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer-links a { font-size: 14px; color: var(--muted2); text-decoration: none; transition: color .2s; }
+.footer-links a:hover { color: var(--white); }
+
+.footer-bottom {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.footer-copy { font-size: 13px; color: var(--muted); }
+.footer-legal { display: flex; gap: 24px; }
+.footer-legal a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color .2s; }
+.footer-legal a:hover { color: var(--white); }
+
+/* ─── SCROLL REVEAL ─── */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity .7s ease, transform .7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes countUp {
+  from { opacity: 0; transform: scale(.9); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 1024px) {
+  nav { padding: 16px 24px; }
+  .nav-links { display: none; }
+  .feature-block { grid-template-columns: 1fr; gap: 40px; }
+  .feature-block.reverse { direction: ltr; }
+  .pricing-grid { grid-template-columns: 1fr; max-width: 480px; }
+  .demo-container { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .section, #pricing, #demo { padding: 80px 24px; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); padding: 40px 24px; }
+  .mock-kpis { grid-template-columns: repeat(2, 1fr); }
+  .hero-title { letter-spacing: -1px; }
+}
+
+@media (max-width: 600px) {
+  .form-row { grid-template-columns: 1fr; }
+  .demo-form-wrap { padding: 24px; }
+  .fv-achievements { grid-template-columns: repeat(2, 1fr); }
+  .footer-grid { grid-template-columns: 1fr; }
+  .footer-bottom { flex-direction: column; gap: 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Cursor personalizado -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- ═══════════════════════════════════════
+     NAVBAR
+═══════════════════════════════════════ -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-mark">PL</div>
+    <span class="nav-logo-name">PlanLab<span class="nav-logo-sup">®</span></span>
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="#features" data-es="Plataforma" data-en="Platform">Plataforma</a></li>
+    <li><a href="#pricing" data-es="Precios" data-en="Pricing">Precios</a></li>
+    <li><a href="#demo" data-es="Casos de uso" data-en="Use cases">Casos de uso</a></li>
+  </ul>
+
+  <div style="display:flex;align-items:center;gap:12px">
+    <div class="nav-lang">
+      <button class="lang-btn active" onclick="setLang('es')">ES</button>
+      <button class="lang-btn" onclick="setLang('en')">EN</button>
+    </div>
+    <button class="nav-cta" onclick="scrollToDemo()" data-es="Solicitar Demo" data-en="Request Demo">Solicitar Demo</button>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════
+     HERO
+═══════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-orb orb-1"></div>
+  <div class="hero-orb orb-2"></div>
+  <div class="hero-orb orb-3"></div>
+
+  <div class="hero-badge">
+    <div class="badge-dot"></div>
+    <span data-es="Más que un LMS — Intelligence People Platform" data-en="More than an LMS — Intelligence People Platform">Más que un LMS — Intelligence People Platform</span>
+  </div>
+
+  <h1 class="hero-title">
+    <span class="line-1" data-es="Transforma cómo" data-en="Transform how">Transforma cómo</span>
+    <span class="line-2" data-es="tu gente aprende" data-en="your people learn">tu gente aprende</span>
+  </h1>
+
+  <p class="hero-sub" data-es="PlanLab mide el impacto real de cada capacitación, cierra brechas con inteligencia, y entrega al Gerente General la visibilidad que necesita para tomar decisiones." data-en="PlanLab measures the real impact of every training, closes skill gaps intelligently, and gives executives the visibility needed to make decisions.">
+    PlanLab mide el impacto real de cada capacitación, cierra brechas con inteligencia, y entrega al Gerente General la visibilidad que necesita para tomar decisiones.
+  </p>
+
+  <div class="hero-actions">
+    <button class="btn-primary" onclick="scrollToDemo()">
+      <span data-es="Agenda tu Demo" data-en="Schedule your Demo">Agenda tu Demo</span>
+      <span>→</span>
+    </button>
+    <button class="btn-ghost" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">
+      <span>▶</span>
+      <span data-es="Ver la plataforma" data-en="See the platform">Ver la plataforma</span>
+    </button>
+  </div>
+
+  <div class="hero-trusted">
+    <p class="trusted-label" data-es="Confiado por empresas líderes" data-en="Trusted by leading companies">Confiado por empresas líderes</p>
+    <div class="trusted-logos">
+      <span class="trusted-logo">Coexca</span>
+      <span class="trusted-logo">Arauco</span>
+      <span class="trusted-logo">Sodimac</span>
+      <span class="trusted-logo">Cencosud</span>
+      <span class="trusted-logo">Colbún</span>
+    </div>
+  </div>
+
+  <!-- Mockup animado del producto -->
+  <div class="hero-mockup">
+    <div class="mockup-glow"></div>
+    <div class="mockup-window">
+      <div class="mockup-titlebar">
+        <div class="titlebar-dot" style="background:#FF5F57"></div>
+        <div class="titlebar-dot" style="background:#FEBC2E"></div>
+        <div class="titlebar-dot" style="background:#28C840"></div>
+        <div class="titlebar-url">app.planlab.io — Dashboard Ejecutivo</div>
+      </div>
+      <div class="mockup-content">
+
+        <!-- Screen 1: Dashboard gerencial -->
+        <div class="mockup-screen active" id="screen-1">
+          <div class="screen-header">
+            <div class="screen-title" style="color:white">Dashboard Ejecutivo</div>
+            <div class="screen-pills">
+              <div class="screen-pill" style="color:var(--green);border-color:rgba(0,200,150,.3);background:rgba(0,200,150,.08)">Q1 2026</div>
+              <div class="screen-pill" style="color:var(--muted2);border-color:var(--border)">Todas las áreas</div>
+            </div>
+          </div>
+          <div class="mock-kpis">
+            <div class="mock-kpi">
+              <div class="mock-kpi-val" style="color:var(--green)">78%</div>
+              <div class="mock-kpi-label">Cobertura</div>
+              <div class="mock-kpi-trend" style="color:var(--green)">↑ 12% vs Q4</div>
+            </div>
+            <div class="mock-kpi">
+              <div class="mock-kpi-val" style="color:var(--blue)">287%</div>
+              <div class="mock-kpi-label">ROI Capacitación</div>
+              <div class="mock-kpi-trend" style="color:var(--green)">↑ 41% vs Q4</div>
+            </div>
+            <div class="mock-kpi">
+              <div class="mock-kpi-val" style="color:var(--gold)">14.2h</div>
+              <div class="mock-kpi-label">Horas per cápita</div>
+              <div class="mock-kpi-trend" style="color:var(--green)">↑ 6% vs Q4</div>
+            </div>
+            <div class="mock-kpi">
+              <div class="mock-kpi-val" style="color:var(--red)">3</div>
+              <div class="mock-kpi-label">Alertas críticas</div>
+              <div class="mock-kpi-trend" style="color:var(--red)">↑ Requiere acción</div>
+            </div>
+          </div>
+          <div class="mock-charts">
+            <div class="mock-chart-card">
+              <div class="mock-chart-title">Incremento de Aprendizaje por Área</div>
+              <div class="bars-wrap">
+                <div class="bar" style="height:65%;background:linear-gradient(180deg,var(--blue),rgba(24,71,245,.3));animation-delay:.1s"></div>
+                <div class="bar" style="height:80%;background:linear-gradient(180deg,var(--green),rgba(0,200,150,.3));animation-delay:.2s"></div>
+                <div class="bar" style="height:45%;background:linear-gradient(180deg,var(--gold),rgba(245,200,66,.3));animation-delay:.3s"></div>
+                <div class="bar" style="height:90%;background:linear-gradient(180deg,var(--blue),rgba(24,71,245,.3));animation-delay:.4s"></div>
+                <div class="bar" style="height:55%;background:linear-gradient(180deg,#8B5CF6,rgba(139,92,246,.3));animation-delay:.5s"></div>
+                <div class="bar" style="height:75%;background:linear-gradient(180deg,var(--green),rgba(0,200,150,.3));animation-delay:.6s"></div>
+              </div>
+            </div>
+            <div class="mock-chart-card">
+              <div class="mock-chart-title">Nivel Kirkpatrick</div>
+              <div class="donut-fake"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Screen 2: Vista participante -->
+        <div class="mockup-screen" id="screen-2">
+          <div class="mock-profile">
+            <div class="mock-avatar">M</div>
+            <div class="mock-progress-wrap">
+              <div class="mock-progress-label">María González — Operaciones · Nivel 3</div>
+              <div class="mock-progress-bar">
+                <div class="mock-progress-fill" style="width:72%"></div>
+              </div>
+              <div style="font-size:11px;color:var(--muted)">1.440 XP · 72% del nivel siguiente</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-family:var(--font-h);font-size:20px;font-weight:800;color:var(--gold)">🏆 72%</div>
+              <div style="font-size:10px;color:var(--muted)">Completado</div>
+            </div>
+          </div>
+          <div class="mock-badges">
+            <div class="mock-badge"><div class="badge-icon">🔒</div><div class="badge-name">Seguridad</div><div class="badge-earned" style="color:var(--green)">Obtenido</div></div>
+            <div class="mock-badge"><div class="badge-icon">⭐</div><div class="badge-name">Top Learner</div><div class="badge-earned" style="color:var(--green)">Obtenido</div></div>
+            <div class="mock-badge"><div class="badge-icon">📊</div><div class="badge-name">Liderazgo</div><div class="badge-earned" style="color:var(--muted)">En progreso</div></div>
+            <div class="mock-badge"><div class="badge-icon">🎯</div><div class="badge-name">ISO 9001</div><div class="badge-earned" style="color:var(--muted)">Bloqueado</div></div>
+          </div>
+          <div class="mock-courses-list">
+            <div class="mock-course-item">
+              <div class="mock-course-thumb" style="background:linear-gradient(135deg,var(--blue),var(--green))"></div>
+              <div class="mock-course-info">
+                <div class="mock-course-name">Seguridad en el Trabajo</div>
+                <div class="mock-course-prog">Módulo 4/5 — Evaluación pendiente</div>
+              </div>
+              <div class="mock-course-pct" style="color:var(--gold)">80%</div>
+            </div>
+            <div class="mock-course-item">
+              <div class="mock-course-thumb" style="background:linear-gradient(135deg,#8B5CF6,var(--blue))"></div>
+              <div class="mock-course-info">
+                <div class="mock-course-name">Liderazgo Efectivo</div>
+                <div class="mock-course-prog">Módulo 2/6 — En curso</div>
+              </div>
+              <div class="mock-course-pct" style="color:var(--blue)">33%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Screen 3: Creación de cursos con IA -->
+        <div class="mockup-screen" id="screen-3">
+          <div class="mock-ai-prompt">
+            <div class="mock-ai-icon">🤖</div>
+            <div class="mock-ai-text">"Crear curso de Liderazgo Efectivo para supervisores — nivel Kirkpatrick 3 con evaluación 360°"</div>
+            <div class="mock-ai-cursor"></div>
+          </div>
+          <div class="mock-modules">
+            <div class="mock-module" style="animation-delay:.2s">
+              <div class="module-num">1</div>
+              <div class="module-info">
+                <div class="module-name">Introducción al Liderazgo Situacional</div>
+                <div class="module-meta">3 lecciones · 45 min · Diagnóstica incluida</div>
+              </div>
+              <div class="module-status" style="background:rgba(0,200,150,.1);color:var(--green)">✓ Generado</div>
+            </div>
+            <div class="mock-module" style="animation-delay:.4s">
+              <div class="module-num">2</div>
+              <div class="module-info">
+                <div class="module-name">Comunicación y Feedback Constructivo</div>
+                <div class="module-meta">4 lecciones · 60 min · Evidencia 360°</div>
+              </div>
+              <div class="module-status" style="background:rgba(0,200,150,.1);color:var(--green)">✓ Generado</div>
+            </div>
+            <div class="mock-module" style="animation-delay:.6s">
+              <div class="module-num">3</div>
+              <div class="module-info">
+                <div class="module-name">Gestión de Equipos de Alto Rendimiento</div>
+                <div class="module-meta">5 lecciones · 75 min · Evaluación impacto</div>
+              </div>
+              <div class="module-status" style="background:rgba(24,71,245,.1);color:var(--blue);animation:blink 1.5s infinite">⟳ Generando…</div>
+            </div>
+          </div>
+          <div style="padding:10px 14px;background:rgba(0,200,150,.05);border:1px solid rgba(0,200,150,.15);border-radius:8px">
+            <div style="font-size:10px;color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Evaluación de impacto generada — Nivel 2 Kirkpatrick</div>
+            <div style="font-size:11px;color:var(--muted2)">¿Cuál es la diferencia entre liderazgo directivo y participativo?</div>
+            <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap">
+              <span style="font-size:10px;padding:3px 8px;background:rgba(0,200,150,.1);color:var(--green);border-radius:4px">✓ Adapta el estilo según madurez del equipo</span>
+              <span style="font-size:10px;padding:3px 8px;background:rgba(255,255,255,.04);color:var(--muted);border-radius:4px">El directivo siempre da instrucciones</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Indicadores -->
+        <div class="screen-indicators">
+          <div class="screen-dot active" onclick="goToScreen(0)"></div>
+          <div class="screen-dot" onclick="goToScreen(1)"></div>
+          <div class="screen-dot" onclick="goToScreen(2)"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     STATS
+═══════════════════════════════════════ -->
+<div id="stats">
+  <div class="stats-grid">
+    <div class="stat-item reveal">
+      <div class="stat-num">+287%</div>
+      <div class="stat-label" data-es="ROI promedio de capacitación" data-en="Average training ROI">ROI promedio de capacitación</div>
+    </div>
+    <div class="stat-item reveal" style="transition-delay:.1s">
+      <div class="stat-num">4 niveles</div>
+      <div class="stat-label" data-es="Kirkpatrick + ROI integrados" data-en="Kirkpatrick + ROI integrated">Kirkpatrick + ROI integrados</div>
+    </div>
+    <div class="stat-item reveal" style="transition-delay:.2s">
+      <div class="stat-num">10x</div>
+      <div class="stat-label" data-es="Más rápido crear cursos con IA" data-en="Faster course creation with AI">Más rápido crear cursos con IA</div>
+    </div>
+    <div class="stat-item reveal" style="transition-delay:.3s">
+      <div class="stat-num">360°</div>
+      <div class="stat-label" data-es="Visibilidad de impacto conductual" data-en="Behavioral impact visibility">Visibilidad de impacto conductual</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     MARQUEE
+═══════════════════════════════════════ -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <div class="marquee-item"><span>📊</span> Dashboard Gerencial Kirkpatrick</div>
+    <div class="marquee-item"><span>🤖</span> Creación de Cursos con IA</div>
+    <div class="marquee-item"><span>🎯</span> Evaluación de Impacto N1→N4</div>
+    <div class="marquee-item"><span>🏆</span> Gamificación y Logros</div>
+    <div class="marquee-item"><span>📋</span> DNC Inteligente</div>
+    <div class="marquee-item"><span>🔄</span> Evidencia 360° Conductual</div>
+    <div class="marquee-item"><span>💡</span> Insights Ejecutivos IA</div>
+    <div class="marquee-item"><span>📈</span> ROI de Capacitación</div>
+    <div class="marquee-item"><span>🎓</span> Certificados Automáticos</div>
+    <div class="marquee-item"><span>⚡</span> Carga Masiva de Usuarios</div>
+    <!-- duplicado para loop continuo -->
+    <div class="marquee-item"><span>📊</span> Dashboard Gerencial Kirkpatrick</div>
+    <div class="marquee-item"><span>🤖</span> Creación de Cursos con IA</div>
+    <div class="marquee-item"><span>🎯</span> Evaluación de Impacto N1→N4</div>
+    <div class="marquee-item"><span>🏆</span> Gamificación y Logros</div>
+    <div class="marquee-item"><span>📋</span> DNC Inteligente</div>
+    <div class="marquee-item"><span>🔄</span> Evidencia 360° Conductual</div>
+    <div class="marquee-item"><span>💡</span> Insights Ejecutivos IA</div>
+    <div class="marquee-item"><span>📈</span> ROI de Capacitación</div>
+    <div class="marquee-item"><span>🎓</span> Certificados Automáticos</div>
+    <div class="marquee-item"><span>⚡</span> Carga Masiva de Usuarios</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     FEATURES
+═══════════════════════════════════════ -->
+<div id="features">
+
+  <!-- Feature 1: Vista gerencial -->
+  <div class="feature-block" id="fb1">
+    <div class="feature-text">
+      <div class="section-eyebrow">
+        <div class="eyebrow-line"></div>
+        <span class="eyebrow-text" data-es="Vista Ejecutiva" data-en="Executive View">Vista Ejecutiva</span>
+      </div>
+      <h2 class="section-title" data-es="El GG ve el impacto<br><em>en tiempo real</em>" data-en="The CEO sees impact<br><em>in real time</em>">El GG ve el impacto<br><em>en tiempo real</em></h2>
+      <p class="section-sub" data-es="Dashboard Kirkpatrick completo: desde asistencia y NPS hasta ROI y evidencia conductual 360°. Semáforo por área, alertas críticas, y cursos fuera de plazo en una sola pantalla." data-en="Full Kirkpatrick dashboard: from attendance and NPS to ROI and 360° behavioral evidence. Traffic lights by area, critical alerts, and overdue courses on one screen.">
+        Dashboard Kirkpatrick completo: desde asistencia y NPS hasta ROI y evidencia conductual 360°. Semáforo por área, alertas críticas, y cursos fuera de plazo en una sola pantalla.
+      </p>
+      <div class="feature-cards">
+        <div class="feature-card">
+          <div class="fc-icon" style="background:rgba(24,71,245,.1)">📊</div>
+          <div>
+            <div class="fc-title" data-es="4 Niveles Kirkpatrick + ROI" data-en="4 Kirkpatrick Levels + ROI">4 Niveles Kirkpatrick + ROI</div>
+            <div class="fc-desc" data-es="Reacción, Aprendizaje, Conducta y Resultados — todo medido y visualizado." data-en="Reaction, Learning, Behavior and Results — all measured and visualized.">Reacción, Aprendizaje, Conducta y Resultados — todo medido y visualizado.</div>
+          </div>
+        </div>
+        <div class="feature-card">
+          <div class="fc-icon" style="background:rgba(0,200,150,.1)">🎯</div>
+          <div>
+            <div class="fc-title" data-es="Accountability en tiempo real" data-en="Real-time accountability">Accountability en tiempo real</div>
+            <div class="fc-desc" data-es="Quién fue, quién no, quién se certificó — por área, cargo, persona y período." data-en="Who attended, who didn't, who got certified — by area, role, person and period.">Quién fue, quién no, quién se certificó — por área, cargo, persona y período.</div>
+          </div>
+        </div>
+        <div class="feature-card">
+          <div class="fc-icon" style="background:rgba(245,200,66,.1)">⚡</div>
+          <div>
+            <div class="fc-title" data-es="Alertas inteligentes" data-en="Smart alerts">Alertas inteligentes</div>
+            <div class="fc-desc" data-es="Cursos críticos fuera de plazo, áreas con cobertura baja, brechas sin cerrar." data-en="Critical courses overdue, low-coverage areas, unclosed skill gaps.">Cursos críticos fuera de plazo, áreas con cobertura baja, brechas sin cerrar.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="feature-visual">
+      <div class="fv-dashboard">
+        <div class="fv-kpis">
+          <div class="fv-kpi">
+            <div class="fv-kpi-val" style="color:var(--green)">78%</div>
+            <div class="fv-kpi-lbl">Cobertura Global</div>
+          </div>
+          <div class="fv-kpi">
+            <div class="fv-kpi-val" style="color:var(--gold)">287%</div>
+            <div class="fv-kpi-lbl">ROI Estimado</div>
+          </div>
+          <div class="fv-kpi">
+            <div class="fv-kpi-val" style="color:var(--blue)">+31%</div>
+            <div class="fv-kpi-lbl">ΔA Promedio</div>
+          </div>
+          <div class="fv-kpi">
+            <div class="fv-kpi-val" style="color:var(--red)">3</div>
+            <div class="fv-kpi-lbl">Alertas Críticas</div>
+          </div>
+        </div>
+        <div class="fv-chart-area">
+          <div class="mock-chart-title">Accountability por curso</div>
+          <div class="fv-bars">
+            <div class="fv-bar-item">
+              <div class="fv-bar" style="height:82%;background:linear-gradient(180deg,var(--green),rgba(0,200,150,.2));animation-delay:.2s"></div>
+              <div class="fv-bar-lbl">Seg.</div>
+            </div>
+            <div class="fv-bar-item">
+              <div class="fv-bar" style="height:74%;background:linear-gradient(180deg,var(--blue),rgba(24,71,245,.2));animation-delay:.3s"></div>
+              <div class="fv-bar-lbl">Lid.</div>
+            </div>
+            <div class="fv-bar-item">
+              <div class="fv-bar" style="height:55%;background:linear-gradient(180deg,var(--gold),rgba(245,200,66,.2));animation-delay:.4s"></div>
+              <div class="fv-bar-lbl">Excel</div>
+            </div>
+            <div class="fv-bar-item">
+              <div class="fv-bar" style="height:82%;background:linear-gradient(180deg,var(--green),rgba(0,200,150,.2));animation-delay:.5s"></div>
+              <div class="fv-bar-lbl">Cli.</div>
+            </div>
+            <div class="fv-bar-item">
+              <div class="fv-bar" style="height:65%;background:linear-gradient(180deg,#8B5CF6,rgba(139,92,246,.2));animation-delay:.6s"></div>
+              <div class="fv-bar-lbl">ISO</div>
+            </div>
+          </div>
+        </div>
+        <!-- Semáforos -->
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <div style="padding:8px 14px;background:rgba(0,200,150,.08);border:1px solid rgba(0,200,150,.2);border-radius:8px;font-size:11px;color:var(--green);font-weight:600">🟢 Administración 88%</div>
+          <div style="padding:8px 14px;background:rgba(245,200,66,.08);border:1px solid rgba(245,200,66,.2);border-radius:8px;font-size:11px;color:var(--gold);font-weight:600">🟡 Operaciones 67%</div>
+          <div style="padding:8px 14px;background:rgba(255,77,109,.08);border:1px solid rgba(255,77,109,.2);border-radius:8px;font-size:11px;color:var(--red);font-weight:600">🔴 Comercial 55%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feature 2: Participante -->
+  <div class="feature-block reverse" id="fb2">
+    <div class="feature-text">
+      <div class="section-eyebrow">
+        <div class="eyebrow-line" style="background:var(--green)"></div>
+        <span class="eyebrow-text" style="color:var(--green)" data-es="Experiencia del Participante" data-en="Learner Experience">Experiencia del Participante</span>
+      </div>
+      <h2 class="section-title" data-es="Aprenden más.<br><em>Se motivan más.</em>" data-en="They learn more.<br><em>They get more motivated.</em>">Aprenden más.<br><em>Se motivan más.</em></h2>
+      <p class="section-sub" data-es="Gamificación real: XP, logros, niveles y certificados. El participante ve su progreso, compite sanamente y tiene claridad de hacia dónde va en la organización." data-en="Real gamification: XP, achievements, levels and certificates. Learners see their progress, compete healthily and have clarity on where they're headed.">
+        Gamificación real: XP, logros, niveles y certificados. El participante ve su progreso, compite sanamente y tiene claridad de hacia dónde va en la organización.
+      </p>
+      <div class="feature-cards">
+        <div class="feature-card">
+          <div class="fc-icon" style="background:rgba(0,200,150,.1)">🏆</div>
+          <div>
+            <div class="fc-title" data-es="Sistema de logros y certificados" data-en="Achievement and certificate system">Sistema de logros y certificados</div>
+            <div class="fc-desc" data-es="Badges por competencia, certificados descargables y ranking de aprendizaje." data-en="Competency badges, downloadable certificates and learning leaderboard.">Badges por competencia, certificados descargables y ranking de aprendizaje.</div>
+          </div>
+        </div>
+        <div class="feature-card">
+          <div class="fc-icon" style="background:rgba(245,200,66,.1)">📱</div>
+          <div>
+            <div class="fc-title" data-es="Acceso 100% responsivo" data-en="100% responsive access">Acceso 100% responsivo</div>
+            <div class="fc-desc" data-es="Desde celular, tablet o computador. Sin apps adicionales, solo el navegador." data-en="From mobile, tablet or computer. No additional apps, just the browser.">Desde celular, tablet o computador. Sin apps adicionales, solo el navegador.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="feature-visual">
+      <div class="fv-participant">
+        <div class="fv-participant-header">
+          <div class="fv-avatar">M</div>
+          <div>
+            <div class="fv-user-name">María González</div>
+            <div class="fv-user-role">Operaciones · Nivel 3 · 1.440 XP</div>
+            <div class="fv-xp-bar"><div class="fv-xp-fill"></div></div>
+          </div>
+        </div>
+        <div class="fv-achievements">
+          <div class="fv-achievement">
+            <div class="fv-ach-icon">🔒</div>
+            <div class="fv-ach-name">Seguridad</div>
+            <div class="fv-ach-pts" style="color:var(--green)">+500 XP</div>
+          </div>
+          <div class="fv-achievement">
+            <div class="fv-ach-icon">⭐</div>
+            <div class="fv-ach-name">Top Learner</div>
+            <div class="fv-ach-pts" style="color:var(--gold)">+300 XP</div>
+          </div>
+          <div class="fv-achievement" style="opacity:.4">
+            <div class="fv-ach-icon">🎯</div>
+            <div class="fv-ach-name">ISO 9001</div>
+            <div class="fv-ach-pts" style="color:var(--muted)">Bloqueado</div>
+          </div>
+        </div>
+        <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:14px">
+          <div style="font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Mis cursos activos</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div style="width:36px;height:36px;background:linear-gradient(135deg,var(--blue),var(--green));border-radius:8px;flex-shrink:0"></div>
+              <div style="flex:1">
+                <div style="font-size:12px;font-weight:600;margin-bottom:3px">Seguridad en el Trabajo</div>
+                <div style="height:4px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden"><div style="height:100%;width:80%;background:var(--green);border-radius:4px"></div></div>
+              </div>
+              <div style="font-size:12px;font-weight:700;color:var(--green)">80%</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <div style="width:36px;height:36px;background:linear-gradient(135deg,#8B5CF6,var(--blue));border-radius:8px;flex-shrink:0"></div>
+              <div style="flex:1">
+                <div style="font-size:12px;font-weight:600;margin-bottom:3px">Liderazgo Efectivo</div>
+                <div style="height:4px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden"><div style="height:100%;width:33%;background:var(--blue);border-radius:4px"></div></div>
+              </div>
+              <div style="font-size:12px;font-weight:700;color:var(--blue)">33%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feature 3: Creación IA -->
+  <div class="feature-block" id="fb3">
+    <div class="feature-text">
+      <div class="section-eyebrow">
+        <div class="eyebrow-line" style="background:var(--gold)"></div>
+        <span class="eyebrow-text" style="color:var(--gold)" data-es="Diseño Instruccional con IA" data-en="AI-Powered Instructional Design">Diseño Instruccional con IA</span>
+      </div>
+      <h2 class="section-title" data-es="De la idea al curso<br><em>en minutos.</em>" data-en="From idea to course<br><em>in minutes.</em>">De la idea al curso<br><em>en minutos.</em></h2>
+      <p class="section-sub" data-es="Describe el objetivo de aprendizaje y la IA genera la estructura completa: módulos, contenidos, evaluaciones diagnósticas y finales, todo alineado al nivel Kirkpatrick que necesitas." data-en="Describe the learning objective and AI generates the complete structure: modules, content, diagnostic and final assessments, all aligned to the Kirkpatrick level you need.">
+        Describe el objetivo de aprendizaje y la IA genera la estructura completa: módulos, contenidos, evaluaciones diagnósticas y finales, todo alineado al nivel Kirkpatrick que necesitas.
+      </p>
+      <div class="feature-cards">
+        <div class="feature-card">
+          <div class="fc-icon" style="background:rgba(245,200,66,.1)">🤖</div>
+          <div>
+            <div class="fc-title" data-es="Generación de contenido y evaluaciones" data-en="Content and assessment generation">Generación de contenido y evaluaciones</div>
+            <div class="fc-desc" data-es="La IA crea preguntas diagnósticas, de proceso y de impacto ajustadas al cargo y nivel." data-en="AI creates diagnostic, process and impact questions tailored to role and level.">La IA crea preguntas diagnósticas, de proceso y de impacto ajustadas al cargo y nivel.</div>
+          </div>
+        </div>
+        <div class="feature-card">
+          <div class="fc-icon" style="background:rgba(139,92,246,.1)">📐</div>
+          <div>
+            <div class="fc-title" data-es="DNC inteligente" data-en="Intelligent TNA">DNC inteligente</div>
+            <div class="fc-desc" data-es="Detecta brechas por cargo, área y jerarquía. Propone el plan de capacitación automáticamente." data-en="Detects gaps by role, area and hierarchy. Automatically proposes the training plan.">Detecta brechas por cargo, área y jerarquía. Propone el plan de capacitación automáticamente.</div>
+          </div>
+        </div>
+        <div class="feature-card">
+          <div class="fc-icon" style="background:rgba(24,71,245,.1)">🔄</div>
+          <div>
+            <div class="fc-title" data-es="Mejora continua del contenido" data-en="Continuous content improvement">Mejora continua del contenido</div>
+            <div class="fc-desc" data-es="La IA analiza los resultados y sugiere mejoras específicas al diseño instruccional." data-en="AI analyzes results and suggests specific instructional design improvements.">La IA analiza los resultados y sugiere mejoras específicas al diseño instruccional.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="feature-visual">
+      <div class="fv-ai-creator">
+        <div class="fv-ai-header">
+          <span style="font-size:18px">🤖</span>
+          <div>
+            <div class="fv-ai-label">PlanLab IA · Diseño Instruccional</div>
+            <div class="fv-ai-typing" data-es="Generando estructura del curso..." data-en="Generating course structure...">Generando estructura del curso...</div>
+          </div>
+        </div>
+        <div class="fv-ai-modules">
+          <div class="fv-ai-module" style="animation-delay:.3s">
+            <div class="fv-mod-num">1</div>
+            <div class="fv-mod-name">Introducción al Liderazgo Situacional</div>
+            <div class="fv-mod-tag" style="background:rgba(0,200,150,.1);color:var(--green)">✓ Listo</div>
+          </div>
+          <div class="fv-ai-module" style="animation-delay:.5s">
+            <div class="fv-mod-num">2</div>
+            <div class="fv-mod-name">Comunicación y Feedback</div>
+            <div class="fv-mod-tag" style="background:rgba(0,200,150,.1);color:var(--green)">✓ Listo</div>
+          </div>
+          <div class="fv-ai-module" style="animation-delay:.7s">
+            <div class="fv-mod-num">3</div>
+            <div class="fv-mod-name">Equipos de Alto Rendimiento</div>
+            <div class="fv-mod-tag" style="background:rgba(24,71,245,.1);color:var(--blue)">⟳ Generando</div>
+          </div>
+        </div>
+        <div class="fv-eval-preview">
+          <div class="fv-eval-title">Evaluación de Impacto — Nivel 2 Kirkpatrick</div>
+          <div class="fv-eval-q">¿Cómo adapta su estilo de liderazgo según la madurez del equipo?</div>
+          <div class="fv-eval-opts">
+            <div class="fv-eval-opt correct">✓ Evalúa la madurez y adapta directivo/participativo</div>
+            <div class="fv-eval-opt">Siempre usa el mismo estilo</div>
+            <div class="fv-eval-opt">Delega todo al equipo</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /features -->
+
+<!-- ═══════════════════════════════════════
+     PRICING
+═══════════════════════════════════════ -->
+<section id="pricing">
+  <div class="pricing-header reveal">
+    <div class="section-eyebrow" style="justify-content:center">
+      <div class="eyebrow-line"></div>
+      <span class="eyebrow-text" data-es="Planes Enterprise" data-en="Enterprise Plans">Planes Enterprise</span>
+      <div class="eyebrow-line"></div>
+    </div>
+    <h2 class="section-title" style="text-align:center" data-es="Elige el nivel de<br><em>inteligencia que necesitas</em>" data-en="Choose the level of<br><em>intelligence you need</em>">Elige el nivel de<br><em>inteligencia que necesitas</em></h2>
+    <p class="section-sub" style="text-align:center;margin:0 auto" data-es="Sin contratos anuales rígidos. Pricing a medida para cada empresa. Contacta para una propuesta personalizada." data-en="No rigid annual contracts. Custom pricing for each company. Contact us for a tailored proposal.">
+      Sin contratos anuales rígidos. Pricing a medida para cada empresa. Contacta para una propuesta personalizada.
+    </p>
+  </div>
+
+  <div class="pricing-grid">
+
+    <!-- Starter -->
+    <div class="price-card reveal">
+      <div class="price-tier" data-es="Esencial" data-en="Essential">Esencial</div>
+      <div class="price-name">PlanLab Core</div>
+      <div class="price-desc" data-es="Para empresas que quieren medir y gestionar su capacitación con foco en resultados reales." data-en="For companies that want to measure and manage training with a focus on real results.">Para empresas que quieren medir y gestionar su capacitación con foco en resultados reales.</div>
+      <div class="price-amount">
+        <div class="price-custom" data-es="Precio a medida" data-en="Custom pricing">Precio a medida</div>
+        <div class="price-note" data-es="Según cantidad de usuarios y módulos" data-en="Based on users and modules">Según cantidad de usuarios y módulos</div>
+      </div>
+      <ul class="price-features">
+        <li class="price-feature"><span class="pf-check yes">✓</span><span data-es="LMS con branding propio" data-en="LMS with own branding">LMS con branding propio</span></li>
+        <li class="price-feature"><span class="pf-check yes">✓</span><span data-es="Dashboard Kirkpatrick N1 + N2" data-en="Kirkpatrick Dashboard N1 + N2">Dashboard Kirkpatrick N1 + N2</span></li>
+        <li class="price-feature"><span class="pf-check yes">✓</span><span data-es="Gamificación y certificados" data-en="Gamification and certificates">Gamificación y certificados</span></li>
+        <li class="price-feature"><span class="pf-check yes">✓</span><span data-es="Carga masiva de usuarios" data-en="Bulk user upload">Carga masiva de usuarios</span></li>
+        <li class="price-feature"><span class="pf-check yes">✓</span><span data-es="Hasta 300 usuarios" data-en="Up to 300 users">Hasta 300 usuarios</span></li>
+        <li class="price-feature"><span class="pf-check yes">✓</span><span data-es="Soporte estándar" data-en="Standard support">Soporte estándar</span></li>
+      </ul>
+      <button class="price-cta outline" onclick="scrollToDemo()" data-es="Solicitar Demo" data-en="Request Demo">Solicitar Demo</button>
+    </div>
+
+    <!-- Professional - FEATURED -->
+    <div class="price-card featured reveal" style="transition-delay:.1s">
+      <div class="price-badge" data-es="Más popular" data-en="Most popular">Más popular</div>
+      <div class="price-tier" data-es="Profesional" data-en="Professional">Profesional</div>
+      <div class="price-name">PlanLab Pro</div>
+      <div class="price-desc" data-es="Para áreas de RRHH que quieren cerrar brechas reales, medir impacto conductual y demostrar ROI." data-en="For HR teams that want to close real gaps, measure behavioral impact and demonstrate ROI.">Para áreas de RRHH que quieren cerrar brechas reales, medir impacto conductual y demostrar ROI.</div>
+      <div class="price-amount">
+        <div class="price-custom" data-es="Precio a medida" data-en="Custom pricing">Precio a medida</div>
+        <div class="price-note" data-es="Incluye onboarding y acompañamiento" data-en="Includes onboarding and support">Incluye onboarding y acompañamiento</div>
+      </div>
+      <div class="price-ia-tag">
+        <span>🤖</span>
+        <span data-es="Incluye IA para mejora de cursos y DI" data-en="Includes AI for course and ID improvement">Incluye IA para mejora de cursos y DI</span>
+      </div>
+      <ul class="price-features">
+        <li class="price-feature"><span class="pf-check yes">✓</span><span data-es="Todo de PlanLab Core" data-en="Everything in PlanLab Core">Todo de PlanLab Core</span></li>
+        <li class="price-feature"><span class="pf-check yes">✓</span><span data-es="Dashboard Kirkpatrick N1→N4 + ROI" data-en="Kirkpatrick Dashboard N1→N4 + ROI">Dashboard Kirkpatrick N1→N4 + ROI</span></li>
+        <li class="price-feature"><span class="pf-check yes">✓</span><span data-es="Evidencia 360° conductual" data-en="360° behavioral evidence">Evidencia 360° conductual</span></li>
+        <li class="price-feature"><span class="pf-check ai">✦</span><span data-es="IA: mejora automática de contenidos" data-en="AI: automatic content improvement">IA: mejora automática de contenidos</span></li>
+        <li class="price-feature"><span class="pf-check ai">✦</span><span data-es="IA: generación de evaluaciones" data-en="AI: assessment generation">IA: generación de evaluaciones</span></li>
+        <li class="price-feature"><span class="pf-check yes">✓</span><span data-es="Hasta 1.000 usuarios" data-en="Up to 1,000 users">Hasta 1.000 usuarios</span></li>
+        <li class="price-feature"><span class="pf-check yes">✓</span><span data-es="Soporte prioritario + Customer Success" data-en="Priority support + Customer Success">Soporte prioritario + Customer Success</span></li>
+      </ul>
+      <button class="price-cta primary" onclick="scrollToDemo()" data-es="Solicitar Demo" data-en="Request Demo">Solicitar Demo</button>
+    </div>
+
+    <!-- Enterprise -->
+    <div class="price-card reveal" style="transition-delay:.2s">
+      <div class="price-tier" data-es="Enterprise" data-en="Enterprise">Enterprise</div>
+      <div class="price-name">PlanLab AI+</div>
+      <div class="price-desc" data-es="Para organizaciones que quieren IA como ventaja estratégica: desde el DNC hasta el insight para el directorio." data-en="For organizations that want AI as a strategic advantage: from TNA to board-level insights.">Para organizaciones que quieren IA como ventaja estratégica: desde el DNC hasta el insight para el directorio.</div>
+      <div class="price-amount">
+        <div class="price-custom" data-es="Propuesta personalizada" data-en="Custom proposal">Propuesta personalizada</div>
+        <div class="price-note" data-es="Incluye consultoría e implementación" data-en="Includes consulting and implementation">Incluye consultoría e implementación</div>
+      </div>
+      <div class="price-ia-tag" style="background:rgba(245,200,66,.06);border-color:rgba(245,200,66,.2)">
+        <span>✦</span>
+        <span style="color:#ffd666" data-es="IA completa: DNC, DI, insights ejecutivos" data-en="Full AI: TNA, ID, executive insights">IA completa: DNC, DI, insights ejecutivos</span>
+      </div>
+      <ul class="price-features">
+        <li class="price-feature"><span class="pf-check yes">✓</span><span data-es="Todo de PlanLab Pro" data-en="Everything in PlanLab Pro">Todo de PlanLab Pro</span></li>
+        <li class="price-feature"><span class="pf-check ai">✦</span><span data-es="IA: DNC inteligente automático" data-en="AI: Automatic intelligent TNA">IA: DNC inteligente automático</span></li>
+        <li class="price-feature"><span class="pf-check ai">✦</span><span data-es="IA: insights ejecutivos para directorio" data-en="AI: executive insights for board">IA: insights ejecutivos para directorio</span></li>
+        <li class="price-feature"><span class="pf-check ai">✦</span><span data-es="IA: creación completa de cursos (DI)" data-en="AI: complete course creation (ID)">IA: creación completa de cursos (DI)</span></li>
+        <li class="price-feature"><span class="pf-check ai">✦</span><span data-es="Tutor IA para cada participante" data-en="AI tutor for each learner">Tutor IA para cada participante</span></li>
+        <li class="price-feature"><span class="pf-check yes">✓</span><span data-es="Usuarios ilimitados" data-en="Unlimited users">Usuarios ilimitados</span></li>
+        <li class="price-feature"><span class="pf-check yes">✓</span><span data-es="SLA + Consultor dedicado Plan Humano" data-en="SLA + Dedicated Plan Humano consultant">SLA + Consultor dedicado Plan Humano</span></li>
+      </ul>
+      <button class="price-cta outline" onclick="scrollToDemo()" data-es="Hablar con ventas" data-en="Talk to sales">Hablar con ventas</button>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     DEMO FORM
+═══════════════════════════════════════ -->
+<section id="demo">
+  <div class="demo-container">
+    <div class="demo-info reveal">
+      <div class="section-eyebrow">
+        <div class="eyebrow-line"></div>
+        <span class="eyebrow-text" data-es="Agenda tu Demo" data-en="Schedule your Demo">Agenda tu Demo</span>
+      </div>
+      <h2 class="section-title" data-es="Veamos juntos<br><em>tu caso de uso</em>" data-en="Let's look together<br><em>at your use case</em>">Veamos juntos<br><em>tu caso de uso</em></h2>
+      <p class="section-sub" data-es="No vendemos al primero que llega. Queremos entender tu empresa, tus brechas y tus objetivos para mostrarte exactamente cómo PlanLab puede ayudarte." data-en="We don't sell to the first person who comes. We want to understand your company, your gaps and your goals to show you exactly how PlanLab can help.">
+        No vendemos al primero que llega. Queremos entender tu empresa, tus brechas y tus objetivos para mostrarte exactamente cómo PlanLab puede ayudarte.
+      </p>
+      <div class="demo-benefits">
+        <div class="demo-benefit">
+          <div class="db-icon">⏱</div>
+          <span data-es="Demo de 45 min personalizada para tu industria" data-en="45-min demo personalized for your industry">Demo de 45 min personalizada para tu industria</span>
+        </div>
+        <div class="demo-benefit">
+          <div class="db-icon">📊</div>
+          <span data-es="Mostramos el dashboard con datos de tu sector" data-en="We show the dashboard with your sector's data">Mostramos el dashboard con datos de tu sector</span>
+        </div>
+        <div class="demo-benefit">
+          <div class="db-icon">💰</div>
+          <span data-es="Estimamos el ROI potencial para tu empresa" data-en="We estimate the potential ROI for your company">Estimamos el ROI potencial para tu empresa</span>
+        </div>
+        <div class="demo-benefit">
+          <div class="db-icon">🤝</div>
+          <span data-es="Recibes propuesta comercial en 48 hrs" data-en="You receive a commercial proposal within 48 hrs">Recibes propuesta comercial en 48 hrs</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-form-wrap reveal" style="transition-delay:.2s">
+      <div id="form-content">
+        <div class="form-title" data-es="Solicita tu demo gratuita" data-en="Request your free demo">Solicita tu demo gratuita</div>
+        <div class="form-subtitle" data-es="Te contactaremos en menos de 24 horas" data-en="We'll contact you within 24 hours">Te contactaremos en menos de 24 horas</div>
+        <form id="demoForm" onsubmit="submitForm(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" data-es="Nombre" data-en="Name">Nombre</label>
+              <input type="text" class="form-input" id="f-nombre" placeholder="Tu nombre completo" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" data-es="Cargo" data-en="Role">Cargo</label>
+              <input type="text" class="form-input" id="f-cargo" placeholder="Ej. Gerente de RRHH" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" data-es="Empresa" data-en="Company">Empresa</label>
+              <input type="text" class="form-input" id="f-empresa" placeholder="Nombre de tu empresa" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" data-es="Tamaño empresa" data-en="Company size">Tamaño empresa</label>
+              <select class="form-select" id="f-tamano">
+                <option value="" data-es="Selecciona..." data-en="Select...">Selecciona...</option>
+                <option value="50-200" data-es="50–200 personas" data-en="50–200 people">50–200 personas</option>
+                <option value="200-500" data-es="200–500 personas" data-en="200–500 people">200–500 personas</option>
+                <option value="500-1000" data-es="500–1.000 personas" data-en="500–1,000 people">500–1.000 personas</option>
+                <option value="1000+" data-es="+1.000 personas" data-en="+1,000 people">+1.000 personas</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-input" id="f-email" placeholder="tu@empresa.com" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" data-es="Teléfono" data-en="Phone">Teléfono</label>
+              <input type="tel" class="form-input" id="f-tel" placeholder="+56 9 1234 5678">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" data-es="¿Cuál es tu principal desafío?" data-en="What is your main challenge?">¿Cuál es tu principal desafío?</label>
+            <textarea class="form-textarea" id="f-desafio" placeholder="Ej. Necesito medir el impacto real de la capacitación, cerrar brechas por área..."></textarea>
+          </div>
+          <button type="submit" class="form-submit" id="submitBtn">
+            <span data-es="Quiero mi demo gratuita" data-en="I want my free demo">Quiero mi demo gratuita</span>
+            <span>→</span>
+          </button>
+        </form>
+      </div>
+      <div class="form-success" id="form-success">
+        <div class="success-icon">🎉</div>
+        <div class="success-title" data-es="¡Solicitud recibida!" data-en="Request received!">¡Solicitud recibida!</div>
+        <div class="success-msg" data-es="Rodrigo de Plan Humano te contactará en las próximas 24 horas para coordinar tu demo personalizada. ¡Gracias por tu interés en PlanLab!" data-en="Rodrigo from Plan Humano will contact you within the next 24 hours to coordinate your personalized demo. Thank you for your interest in PlanLab!">
+          Rodrigo de Plan Humano te contactará en las próximas 24 horas para coordinar tu demo personalizada. ¡Gracias por tu interés en PlanLab!
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════ -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="nav-logo" style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+        <div class="nav-logo-mark">PL</div>
+        <span class="nav-logo-name" style="font-family:var(--font-h);font-weight:700;font-size:18px">PlanLab<span class="nav-logo-sup">®</span></span>
+      </div>
+      <p class="footer-desc" data-es="La plataforma de gestión del talento que convierte la capacitación en resultados medibles. Diseñada para empresas que toman sus decisiones de personas con datos." data-en="The talent management platform that turns training into measurable results. Designed for companies that make people decisions with data.">
+        La plataforma de gestión del talento que convierte la capacitación en resultados medibles. Diseñada para empresas que toman sus decisiones de personas con datos.
+      </p>
+    </div>
+    <div>
+      <div class="footer-col-title" data-es="Plataforma" data-en="Platform">Plataforma</div>
+      <ul class="footer-links">
+        <li><a href="#features" data-es="Vista Gerencial" data-en="Executive View">Vista Gerencial</a></li>
+        <li><a href="#features" data-es="Experiencia Participante" data-en="Learner Experience">Experiencia Participante</a></li>
+        <li><a href="#features" data-es="Creación con IA" data-en="AI Creation">Creación con IA</a></li>
+        <li><a href="#pricing" data-es="Precios" data-en="Pricing">Precios</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title" data-es="Empresa" data-en="Company">Empresa</div>
+      <ul class="footer-links">
+        <li><a href="https://planhumano.cl" target="_blank">Plan Humano</a></li>
+        <li><a href="#demo" data-es="Contacto" data-en="Contact">Contacto</a></li>
+        <li><a href="#demo" data-es="Demo Gratuita" data-en="Free Demo">Demo Gratuita</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title" data-es="Contacto" data-en="Contact">Contacto</div>
+      <ul class="footer-links">
+        <li><a href="mailto:rcubillos@planhumano.cl">rcubillos@planhumano.cl</a></li>
+        <li><a href="https://planhumano.cl" target="_blank">planhumano.cl</a></li>
+        <li><a href="#demo" data-es="Agenda una reunión" data-en="Schedule a meeting">Agenda una reunión</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 Plan Humano Ltda. · PlanLab® es marca registrada.</div>
+    <div class="footer-legal">
+      <a href="#" data-es="Privacidad" data-en="Privacy">Privacidad</a>
+      <a href="#" data-es="Términos" data-en="Terms">Términos</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ═══════════════════════════════════════
+   JAVASCRIPT
+═══════════════════════════════════════ */
+
+// Cursor
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px';
+  cursor.style.top  = my + 'px';
+});
+function animRing() {
+  rx += (mx - rx) * .12;
+  ry += (my - ry) * .12;
+  ring.style.left = (rx - 18) + 'px';
+  ring.style.top  = (ry - 18) + 'px';
+  requestAnimationFrame(animRing);
+}
+animRing();
+document.querySelectorAll('button, a, .price-card, .feature-card').forEach(el => {
+  el.addEventListener('mouseenter', () => { cursor.style.transform = 'translate(-50%,-50%) scale(2)'; ring.style.opacity = '.5'; });
+  el.addEventListener('mouseleave', () => { cursor.style.transform = 'translate(-50%,-50%) scale(1)'; ring.style.opacity = '1'; });
+});
+
+// Navbar scroll
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// Mockup screen rotation
+const screens = document.querySelectorAll('.mockup-screen');
+const dots = document.querySelectorAll('.screen-dot');
+let currentScreen = 0;
+let autoInterval;
+
+function goToScreen(i) {
+  screens[currentScreen].classList.remove('active');
+  dots[currentScreen].classList.remove('active');
+  currentScreen = i;
+  screens[currentScreen].classList.add('active');
+  dots[currentScreen].classList.add('active');
+}
+
+function nextScreen() {
+  goToScreen((currentScreen + 1) % screens.length);
+}
+
+autoInterval = setInterval(nextScreen, 4000);
+dots.forEach((d, i) => d.addEventListener('click', () => {
+  clearInterval(autoInterval);
+  goToScreen(i);
+  autoInterval = setInterval(nextScreen, 4000);
+}));
+
+// Scroll reveal
+const revealEls = document.querySelectorAll('.reveal, .feature-block');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: .12 });
+revealEls.forEach(el => observer.observe(el));
+
+// Scroll to demo
+function scrollToDemo() {
+  document.getElementById('demo').scrollIntoView({ behavior: 'smooth' });
+}
+
+// Language toggle
+let currentLang = 'es';
+function setLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
+  document.querySelectorAll('[data-' + lang + ']').forEach(el => {
+    const txt = el.getAttribute('data-' + lang);
+    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+      el.placeholder = txt;
+    } else if (el.tagName === 'OPTION') {
+      el.textContent = txt;
+    } else {
+      el.innerHTML = txt;
+    }
+  });
+}
+
+// Form submit — envía a Formspree apuntando al email de Rodrigo
+async function submitForm(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  const lang = currentLang;
+
+  btn.disabled = true;
+  btn.innerHTML = lang === 'es' ? '⟳ Enviando...' : '⟳ Sending...';
+
+  const nombre   = document.getElementById('f-nombre').value;
+  const cargo    = document.getElementById('f-cargo').value;
+  const empresa  = document.getElementById('f-empresa').value;
+  const tamano   = document.getElementById('f-tamano').value;
+  const email    = document.getElementById('f-email').value;
+  const tel      = document.getElementById('f-tel').value;
+  const desafio  = document.getElementById('f-desafio').value;
+
+  // Usar Formspree (endpoint gratuito) — reemplazar xyzabcde con el ID real
+  // Para activar: ir a formspree.io, crear form, obtener ID y reemplazarlo aquí
+  // Por ahora simula envío exitoso
+  const payload = { nombre, cargo, empresa, tamano, email, tel, desafio,
+    _subject: `PlanLab Demo Request — ${empresa} — ${nombre}`,
+    _replyto: email
+  };
+
+  // Simulación (reemplazar con fetch real a Formspree o endpoint propio)
+  await new Promise(r => setTimeout(r, 1500));
+
+  document.getElementById('form-content').style.display = 'none';
+  const success = document.getElementById('form-success');
+  success.style.display = 'block';
+  success.style.animation = 'fadeUp .5s ease both';
+}
+
+// Smooth scroll para nav links
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+  });
+});
+</script>
+</body>
+</html>
